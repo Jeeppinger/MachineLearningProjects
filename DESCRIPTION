@@ -7,3 +7,4 @@ Maintainer: ML Group <mrb475@nau.edu>
 Description: Code to show c++ code in an R package.
 License: GPL-3
 ReoxygenNote: 6.1.1
+LinkingTo: RcppEigen
