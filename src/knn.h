@@ -5,3 +5,11 @@ int knn(
     const int n_observations, const int n_features, const int max_neighbors,
     double *test_predictions_ptr    //max_neighbors (vector)
 );
+int Predict1toMaxNeighbors(
+    double *train_inputs_ptr, 
+    double *train_label_ptr, 
+    int nrow, int ncol, 
+    int max_neighbors, 
+    double *test_input_ptr, 
+    double *test_prediction_ptr
+);

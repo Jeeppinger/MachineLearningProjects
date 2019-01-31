@@ -1,4 +1,42 @@
+#include "knn.h"
 #include <Eigen/Dense>
+#include <iostream>
+
+int Predict1toMaxNeighbors(
+  double *train_inputs_ptr, double *train_label_ptr, 
+  int nrow, int ncol, int max_neighbors, 
+  double *test_input_ptr, //ncol
+  //inputs above, outputs below
+  double *test_prediction_ptr //max neighbors
+  ){
+  Eigen::VectorXd distance_vec(nrow);
+  Eigen::Map< Eigen::MatrixXd > train_inputs_mat(train_inputs_ptr, nrow, ncol);
+  Eigen::Map< Eigen::VectorXd > test_input_vec(test_input_ptr, ncol);
+  Eigen::VectorXd diff_vec(ncol);
+  Eigen::VectorXi sorted_index_vec(nrow);
+  //Compute the distance
+  for(int i=0;i<nrow;i++){
+    diff_vec(i) = train_inputs_mat.row(i).transpose()-test_input_vec
+    distance_vec(i) = diff_vec.norm(); //Computes L2 norm
+    sorted_index_vec(i) = i; //initialze sort vec
+  }
+    
+  std::sort(sorted_index_vec.data(),
+            sorted_index_vec.data()+sorted_index_vec.size(),
+            [&distance_vec](int left, int right){             //&distance_vec lets you use distance_vec in this func
+              return distance_vec(left) < distance_vec(right);
+            });
+  //std:: cout << sorted_index_vec << std::endl << std:: endl;
+  double total_labels = 0.0;
+  // First element to max neighbors
+  for(int k=0; k<max_neighbors; k++){
+    int row = sorted_index_vec(k);
+    int neighbors = k+1;
+    total_labels+= train_label_ptr[row];
+    test_prediction_ptr[k]= total_labels/neighbors;
+  }
+  return 0;
+}
 
 int knn(
   const double *train_inputs_ptr, //n_observations x n_features (Matrix)
