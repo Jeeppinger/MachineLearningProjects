@@ -12,9 +12,18 @@
 #' @export
 #'
 #' @examples
-knn <- function(x.mat, y.vec, testX.vec, max.neighbors){
-  result.list() <- .C("knn_interface", as.double(x.mat), as.double(y.vec), as.double(testX.vec),
+#' data(zip.train, package="ElemStatLearn")
+#' i01 <- which(zip.train[,i] %in% c(0,1))
+#' train.i <- i01[1:5]
+#' test.i <- i01[6]
+#' x <- zip.train[train.i, -1]
+#' y <- zip.train[train.i, 1]
+#' testx <- zip.train[test.i, -1]
+#' knn(x, y, testx, 3)
+#' zip.train[test.i, 1]
+knn <- function(x.mat, y.vec, testx.vec, max.neighbors){
+  result.list() <- .C("knn_interface", as.double(x.mat), as.double(y.vec), as.double(testx.vec),
                       as.integer(nrow(x.mat)), as.integer(ncol(x.mat)), as.integer(max.neighbors), 
-                      predicitons=double(max.neighbors), PACKAGE="MachineLearningProjects") 
+                      predicitons=double(max.neighbors), PACKAGE="nearestneighbors") 
   result.list$predicitons
 }
