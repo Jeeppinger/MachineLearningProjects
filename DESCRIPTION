@@ -5,8 +5,8 @@ Version: 2019.01.30
 Author: ML Group
 Maintainer: ML Group <mrb475@nau.edu>
 Description: Code to show c++ code in an R package. This package is an implementation of the K nearest
-neighbors algorithm for the purposes ofa CS499 course at NAU. The package shows the basic interaction
-between c++ code and R. 
+    neighbors algorithm for the purposes ofa CS499 course at NAU. The package shows the basic interaction
+    between c++ code and R. 
 License: GPL-3
 ReoxygenNote: 6.1.1
 LinkingTo: RcppEigen
