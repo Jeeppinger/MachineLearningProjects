@@ -20,7 +20,7 @@ void knn_interface(
 void Predict1toMaxNeighborsMatrix_interface(
   double *train_inputs_ptr, double *train_label_ptr, int* nrow_ptr, int* ncol_ptr, int* max_neighbors_ptr, double *test_input_ptr, double *test_prediction_ptr
 ){
-  int status = Prediction1toMaxNeighbors(
+  int status = Predict1toMaxNeighbors(
     train_inputs_ptr, train_label_ptr, *nrow_ptr, *ncol_ptr, *max_neighbors_ptr, test_input_ptr, test_prediction_ptr);
 }
 
