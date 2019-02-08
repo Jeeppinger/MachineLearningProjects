@@ -17,7 +17,8 @@ int Predict1toMaxNeighbors(
   //Compute the distance
   for(int i=0;i<nrow;i++){
     diff_vec(i) = train_inputs_mat.row(i).transpose()-test_input_vec
-    distance_vec(i) = diff_vec.norm(); //Computes L2 norm
+    distance_vec(i) = diff_vec.lpNorm<1>();//compeutes L1 norm
+    //distance_vec(i) = diff_vec.norm(); //Computes L2 norm
     sorted_index_vec(i) = i; //initialze sort vec
   }
     
