@@ -1,3 +1,5 @@
+int ERROR_NO_TRAIN_DATA=1;
+
 int knn(
     const double *train_inputs_ptr, //n_observations x n_features (Matrix)
     const double *train_label_ptr,  //n_observations (vector)
