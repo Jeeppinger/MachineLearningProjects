@@ -16,6 +16,7 @@ int Predict1toMaxNeighbors(
   Eigen::VectorXi sorted_index_vec(nrow);
   //Compute the distance
   for(int i=0;i<nrow;i++){
+    //this next line has a type mismatch error
     diff_vec(i) = train_inputs_mat.row(i).transpose()-test_input_vec
     distance_vec(i) = diff_vec.lpNorm<1>();//compeutes L1 norm
     //distance_vec(i) = diff_vec.norm(); //Computes L2 norm
@@ -47,18 +48,18 @@ int knn(
   double *test_predictions_ptr    //max_neighbors (vector)
 ){
   Eigen::Map< Eigen::MatrixXd > train_inputs_mat((double*)train_inputs_ptr, n_observations,n_features);
-  Eigen::Map< Eigen::vectorxd > test_input_vec((double*)test_input_ptr,n_features);
-  Eigen::vectorxd dist_vec(n_observations);
-  Eigen::vectorxi sorted_index_vec(n_observations);
+  Eigen::Map< Eigen::VectorXd > test_input_vec((double*)test_input_ptr,n_features);
+  Eigen::VectorXd dist_vec(n_observations);
+  Eigen::VectorXi sorted_index_vec(n_observations);
   for (int i=0; i<n_observations;i++){
-    dis_vec(i) = (train_inputs_mat.row(i).transpose() - test_input_vec).norm();
+    dist_vec(i) = (train_inputs_mat.row(i).transpose() - test_input_vec).norm();
   sorted_index_vec(i) = i;
   }
   std::sort(
     sorted_index_vec.data(),
     sorted_index_vec.data()+sorted_index_vec.size(),
     [&dist_vec](int left, int right){
-      return dis_vec(left) < dist_vec(right);
+      return dist_vec(left) < dist_vec(right);
     }
   );
   double total = 0.0;
