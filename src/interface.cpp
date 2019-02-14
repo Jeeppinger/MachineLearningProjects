@@ -12,7 +12,7 @@ void knn_interface(
   double *test_predictions_ptr    //max_neighbors
 ){
   int status = knn(train_inputs_ptr,train_label_ptr, test_input_ptr, *n_observations_ptr, *n_features_ptr, *max_neighbors_ptr, test_predictions_ptr);
-  if(status == ERROR_NO_TRAIN_DATA){
+  if(status == 1){
     error("non-zero exit status from knn");
   }
 }
