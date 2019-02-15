@@ -11,9 +11,9 @@ knn(x.mat, y.vec, testx.vec, max.neighbors)
 
 \item{y.vec}{label column vector [n]}
 
-\item{max.neighbors}{max number of neighbors}
+\item{testx.vec}{numeric feature vector for test [p]}
 
-\item{testX.vec}{numeric feature vector for test [p]}
+\item{max.neighbors}{max number of neighbors}
 }
 \value{
 numeric vector of size max.neighbors with predicitons from one to max.neighbors
