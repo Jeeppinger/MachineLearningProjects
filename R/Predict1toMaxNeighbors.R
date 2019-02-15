@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' data(zip.train, package="ElemStatLearn")
-#' i01 <- which(zip.train[,i] %in% c(0,1))
+#' i01 <- which(zip.train[,1] %in% c(0,1))
 #' train.i <- i01[1:5]
 #' test.i <- i01[6]
 #' x <- zip.train[train.i, -1]
@@ -22,10 +22,30 @@
 #' knn(x, y, testx, 3)
 #' zip.train[test.i, 1]
 knn <- function(x.mat, y.vec, testx.vec, max.neighbors){
+  result.list$predicitons
   result.list() <- .C("knn_interface", as.double(x.mat), as.double(y.vec), as.double(testx.vec),
                       as.integer(nrow(x.mat)), as.integer(ncol(x.mat)), as.integer(max.neighbors), 
                       predicitons=double(max.neighbors), PACKAGE="nearestneighbors") 
-  result.list$predicitons
+  
+}
+
+NNLearnCV <- function(X.mat, y.vec, max.neighbors=30, fold.vec=NULL, n.folds=5){
+  fold.vec <- sample(rep(1:n.folds, l=nrow(X.mat)))
+  
+  for(fold.i in seq_along(unique.folds)){
+    for(prediction.set.name in c("train", "validation")){
+      pred.mat <- NN1toKmaxPredict(
+        train.features, train.labels,
+        prediction.set.features, max.neighbors)
+      loss.mat <- if(labels.all.01){
+        ifelse(pred.mat>0.5, 1, 0) != y.vec #zero-one loss for binary classification.
+      }else{
+        (pred.mat-y.vec)^2 #square loss for regression.
+      }
+      train.or.validation.loss.mat[, fold.i] <- colMeans(loss.mat)
+    }
+  }
+  
 }
 
 
