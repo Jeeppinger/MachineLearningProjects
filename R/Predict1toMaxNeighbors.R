@@ -18,14 +18,14 @@
 #' test.i <- i01[6]
 #' x <- zip.train[train.i, -1]
 #' y <- zip.train[train.i, 1]
-#' testx <- zip.train[test.i, -1]
-#' knn(x, y, testx, 3)
+#' testx.vec <- zip.train[test.i, -1]
+#' knn(x, y, testx.vec, 3)
 #' zip.train[test.i, 1]
 knn <- function(x.mat, y.vec, testx.vec, max.neighbors){
-  result.list$predicitons
-  result.list() <- .C("knn_interface", as.double(x.mat), as.double(y.vec), as.double(testx.vec),
+  result.list <- .C("knn_interface", as.double(x.mat), as.double(y.vec), as.double(testx.vec),
                       as.integer(nrow(x.mat)), as.integer(ncol(x.mat)), as.integer(max.neighbors), 
-                      predicitons=double(max.neighbors), PACKAGE="nearestneighbors") 
+                      predicitons=double(max.neighbors), PACKAGE="nearestneighbors")
+  result.list$predicitons
   
 }
 
