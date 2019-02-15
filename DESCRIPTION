@@ -12,3 +12,4 @@ ReoxygenNote: 6.1.1
 LinkingTo: RcppEigen
 Imports: data.table
 RoxygenNote: 6.1.1
+Suggests: ElemStatLearn, testthat
