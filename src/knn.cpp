@@ -16,7 +16,6 @@ int Predict1toMaxNeighbors(
   Eigen::VectorXi sorted_index_vec(nrow);
   //Compute the distance
   for(int i=0;i<nrow;i++){
-    //this next line has a type mismatch error
     distance_vec(i) = (train_inputs_mat.row(i).transpose()-test_input_vec).lpNorm<1>();
     //distance_vec(i) = diff_vec.lpNorm<1>();//computes L1 norm
     //distance_vec(i) = diff_vec.norm(); //Computes L2 norm

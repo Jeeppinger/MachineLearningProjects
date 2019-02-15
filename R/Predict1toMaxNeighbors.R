@@ -27,3 +27,5 @@ knn <- function(x.mat, y.vec, testx.vec, max.neighbors){
                       predicitons=double(max.neighbors), PACKAGE="nearestneighbors") 
   result.list$predicitons
 }
+
+
