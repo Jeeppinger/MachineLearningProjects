@@ -28,12 +28,12 @@ test_that("knn fails gracefully", {
   x <- zip.train[train.i, -1]
   y <- zip.train[train.i, 1]
   testx.vec <- zip.train[test.i, -1]
-  max.neighbors <- 4
+  max.neighbors <- 100
   pred.vec <- knn(NULL, y, testx.vec, max.neighbors)
   dist.mat <- t(x) - testx.vec
   dist.vec <- sqrt(colSums(dist.mat * dist.mat))
   sorted.index.vec <- order(dist.vec)
   closest.indices <- sorted.index.vec[1:max.neighbors]
-  expected.prediction <- cumsum(y[closest.indices])/(1:max.neighbors)
+  expected.prediction <- "error code"
   expect_equal(pred.vec,expected.prediction)
 })
