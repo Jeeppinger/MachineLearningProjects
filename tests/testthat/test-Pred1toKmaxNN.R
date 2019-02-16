@@ -33,6 +33,7 @@ test_that("predict1toMaxNeighbors Fails gracefully when invalid # of neighbors",
   dist.vec <- sqrt(colSums(dist.mat * dist.mat))
   sorted.index.vec <- order(dist.vec)
   closest.indices <- sorted.index.vec[1:max.neighbors]
-  expected.prediction <- cumsum(y[closest.indices])/(1:max.neighbors)
+  expected.prediction <- 2 
+#need to update expected prediction to the right error code
   expect_equal(pred.vec,expected.prediction)
 })
