@@ -56,6 +56,34 @@ for(data.name in names(data.list)){
 }
 
 ```
+## Data set 1: spam
+
+### Matrix of loss values
+
+print out and/or plot the matrix.
+
+comment on difference between NN and baseline.
+
+### Train/validation loss plot
+
+plot the two loss functions.
+
+What is the optimal number of neighbors?
+
+## Data set 2: SAheart
+
+### Matrix of loss values
+
+print out and/or plot the matrix.
+
+comment on difference between NN and baseline.
+
+### Train/validation loss plot
+
+plot the two loss functions.
+
+What is the optimal number of neighbors?
+
 
 Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
 
