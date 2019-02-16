@@ -17,106 +17,28 @@ knitr::opts_chunk$set(
 ```
 
 ```{r data}
-data(zip.train, package="ElemStatLearn")
+  data(zip.train, package="ElemStatLearn")
   i01 <- which(zip.train[,1] %in% c(0,1))
   train.i <- i01[1:5]
   test.i <- i01[6]
   x <- zip.train[train.i, -1]
   y <- zip.train[train.i, 1]
   testx.vec <- zip.train[test.i, -1]
-  max.neighbors <- 4
-  results.vec <- knn(x, y, testx.vec, max.neighbors)
-
+  max.neighbors <- 5
+  dist.vec <- sqrt(colSums(dist.mat * dist.mat))
+  sorted.index.vec <- order(dist.vec)
+  closest.indices <- sorted.index.vec[1:max.neighbors]
 ```
-## Data set 1: spam
+## Data set displaying KNN
+
+We couldn't get the NNLearnCV implemented correctly so, we decided to display the data from our knn function.
 
 ### Matrix of loss values
 ```{r}
-results <- results.list[["spam"]]
+data.frame(as.table(setNames(dist.vec, sorted.index.vec, closest.indices)))
 ```
 
 #### Plot
 ```{r}
 plot(results)
 ```
-
-comment on difference between NN and baseline.
-
-### Train/validation loss plot
-
-```{r}
-results <- results.list[["zip.train"]]
-```
-
-What is the optimal number of neighbors?
-
-## Data set 2: SAheart
-
-### Matrix of loss values
-
-```{r}
-results <- results.list[["SAheart"]]
-
-```
-
-#### Plot
-```{r}
-plot(results)
-```
-
-comment on difference between NN and baseline.
-
-### Train/validation loss plot
-
-```{r}
-results <- results.list[["zip.train"]]
-```
-
-What is the optimal number of neighbors?
-
-## Data set 3: prostate
-
-### Matrix of loss values
-
-```{r}
-results <- results.list[["prostate"]]
-```
-
-#### Plot
-```{r}
-plot(results)
-```
-
-comment on difference between NN and baseline.
-
-### Train/validation loss plot
-
-```{r}
-results <- results.list[["zip.train"]]
-```
-
-What is the optimal number of neighbors?
-
-## Data set 4: ozone
-
-### Matrix of loss values
-
-```{r}
-results <- results.list[["ozone"]]
-plot(results)
-```
-
-#### Plot
-```{r}
-plot(results)
-```
-
-comment on difference between NN and baseline.
-
-### Train/validation loss plot
-
-```{r}
-results <- results.list[["zip.train"]]
-```
-
-What is the optimal number of neighbors?
