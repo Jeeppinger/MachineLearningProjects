@@ -30,7 +30,7 @@ knn <- function(x.mat, y.vec, testx.vec, max.neighbors){
 }
 0
 
-#' K nearest neighbors alogrithm
+#' Cross Validation Function
 #'
 #'A package that computes the k nearest neighbors 
 #'This funciton calls the c interface in the package to calculate the k nearest neighbors for a given set of data
