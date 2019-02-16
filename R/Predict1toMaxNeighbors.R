@@ -21,6 +21,7 @@
 #' testx <- zip.train[test.i, -1]
 #' knn(x, y, testx, 3)
 #' zip.train[test.i, 1]
+
 knn <- function(x.mat, y.vec, testx.vec, max.neighbors){
   result.list <- .C("knn_interface", as.double(x.mat), as.double(y.vec), as.double(testx.vec),
                       as.integer(nrow(x.mat)), as.integer(ncol(x.mat)), as.integer(max.neighbors), 
@@ -28,12 +29,27 @@ knn <- function(x.mat, y.vec, testx.vec, max.neighbors){
   result.list$predicitons
 }
 0
+
+#' K nearest neighbors alogrithm
+#'
+#'A package that computes the k nearest neighbors 
+#'This funciton calls the c interface in the package to calculate the k nearest neighbors for a given set of data
+#'
+#' @param x.mat  [n x p] matrix of features
+#' @param y.vec label column vector [n]
+#' @param testx.vec numeric feature vector for test [p]
+#' @param max.neighbors max number of neighbors
+#'
+#' @return numeric vector of size max.neighbors with predicitons from one to max.neighbors
+#' @export
+#'
+#' @examples
  NNLearnCV <- function(X.mat, y.vec, max.neighbors=30, fold.vec=NULL, n.folds=5){
    fold.vec <- sample(rep(1:n.folds, l=nrow(X.mat)))
    
    for(fold.i in seq_along(unique.folds)){
      for(prediction.set.name in c("train", "validation")){
-       pred.mat <- NN1toKmaxPredict(
+      pred.mat <- NN1toKmaxPredict(
          train.features, train.labels,
          prediction.set.features, max.neighbors)
        loss.mat <- if(labels.all.01){
