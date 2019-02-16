@@ -39,12 +39,15 @@ knn <- function(x.mat, y.vec, testx.vec, max.neighbors){
 #' @param y.vec label column vector [n]
 #' @param testx.vec numeric feature vector for test [p]
 #' @param max.neighbors max number of neighbors
+#' @param fold.vec empty vector
+#' @param n.folds number folds
+#' 
 #'
 #' @return numeric vector of size max.neighbors with predicitons from one to max.neighbors
 #' @export
 #'
 #' @examples
- NNLearnCV <- function(X.mat, y.vec, max.neighbors=30, fold.vec=NULL, n.folds=5){
+ NNLearnCV <- function(x.mat, y.vec, max.neighbors=30, fold.vec=NULL, n.folds=5){
    fold.vec <- sample(rep(1:n.folds, l=nrow(X.mat)))
    
    for(fold.i in seq_along(unique.folds)){
