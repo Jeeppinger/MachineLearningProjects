@@ -16,7 +16,7 @@ void knn_interface(
     error("non-zero exit status from knn");
   }
 }
-
+0
 void Predict1toMaxNeighborsMatrix_interface(
   double *train_inputs_ptr, double *train_label_ptr, int* nrow_ptr, int* ncol_ptr, int* max_neighbors_ptr, double *test_input_ptr, double *test_prediction_ptr
 ){
