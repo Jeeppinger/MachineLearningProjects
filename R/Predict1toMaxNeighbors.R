@@ -23,6 +23,9 @@
 #' zip.train[test.i, 1]
 
 knn <- function(x.mat, y.vec, testx.vec, max.neighbors){
+  if(is.null(x.mat)|is.null(y.vec)|is.null(testx.vec)|is.null(max.neighbors)) {
+    return("Null input")
+  }
   if((nrow(x.mat)!= length(y.vec) )| (ncol(x.mat)!=length(testx.vec))) {
     return("Invalid input matrix")
   }

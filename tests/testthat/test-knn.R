@@ -34,6 +34,6 @@ test_that("knn fails gracefully", {
   dist.vec <- sqrt(colSums(dist.mat * dist.mat))
   sorted.index.vec <- order(dist.vec)
   closest.indices <- sorted.index.vec[1:max.neighbors]
-  expected.prediction <- "error code"
+  expected.prediction <- "Null input"
   expect_equal(pred.vec,expected.prediction)
 })
