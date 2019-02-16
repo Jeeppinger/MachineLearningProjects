@@ -59,7 +59,9 @@ for(data.name in names(data.list)){
 ## Data set 1: spam
 
 ### Matrix of loss values
-
+```{r}
+results.list[["spam"]]
+```
 print out and/or plot the matrix.
 
 comment on difference between NN and baseline.
@@ -74,6 +76,10 @@ What is the optimal number of neighbors?
 
 ### Matrix of loss values
 
+```{r}
+results.list[["SAheart"]]
+```
+
 print out and/or plot the matrix.
 
 comment on difference between NN and baseline.
@@ -83,6 +89,44 @@ comment on difference between NN and baseline.
 plot the two loss functions.
 
 What is the optimal number of neighbors?
+
+## Data set 3: prostate
+
+### Matrix of loss values
+
+```{r}
+results.list[["prostate"]]
+```
+
+print out and/or plot the matrix.
+
+comment on difference between NN and baseline.
+
+### Train/validation loss plot
+
+plot the two loss functions.
+
+What is the optimal number of neighbors?
+
+## Data set 4: ozone
+
+### Matrix of loss values
+
+```{r}
+results.list[["ozone"]]
+```
+
+print out and/or plot the matrix.
+
+comment on difference between NN and baseline.
+
+### Train/validation loss plot
+
+plot the two loss functions.
+
+What is the optimal number of neighbors?
+
+
 
 
 Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
