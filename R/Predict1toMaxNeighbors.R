@@ -37,7 +37,6 @@ knn <- function(x.mat, y.vec, testx.vec, max.neighbors){
 #'
 #' @param x.mat  [n x p] matrix of features
 #' @param y.vec label column vector [n]
-#' @param testx.vec numeric feature vector for test [p]
 #' @param max.neighbors max number of neighbors
 #' @param fold.vec empty vector
 #' @param n.folds number folds
