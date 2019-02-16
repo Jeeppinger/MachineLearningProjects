@@ -28,23 +28,23 @@ knn <- function(x.mat, y.vec, testx.vec, max.neighbors){
   result.list$predicitons
 }
 0
-# NNLearnCV <- function(X.mat, y.vec, max.neighbors=30, fold.vec=NULL, n.folds=5){
-#   fold.vec <- sample(rep(1:n.folds, l=nrow(X.mat)))
-#   
-#   for(fold.i in seq_along(unique.folds)){
-#     for(prediction.set.name in c("train", "validation")){
-#       pred.mat <- NN1toKmaxPredict(
-#         train.features, train.labels,
-#         prediction.set.features, max.neighbors)
-#       loss.mat <- if(labels.all.01){
-#         ifelse(pred.mat>0.5, 1, 0) != y.vec #zero-one loss for binary classification.
-#       }else{
-#         (pred.mat-y.vec)^2 #square loss for regression.
-#       }
-#       train.or.validation.loss.mat[, fold.i] <- colMeans(loss.mat)
-#     }
-#   }
-#   
-# }
+ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30, fold.vec=NULL, n.folds=5){
+   fold.vec <- sample(rep(1:n.folds, l=nrow(X.mat)))
+   
+   for(fold.i in seq_along(unique.folds)){
+     for(prediction.set.name in c("train", "validation")){
+       pred.mat <- NN1toKmaxPredict(
+         train.features, train.labels,
+         prediction.set.features, max.neighbors)
+       loss.mat <- if(labels.all.01){
+         ifelse(pred.mat>0.5, 1, 0) != y.vec #zero-one loss for binary classification.
+       }else{
+         (pred.mat-y.vec)^2 #square loss for regression.
+       }
+       train.or.validation.loss.mat[, fold.i] <- colMeans(loss.mat)
+     }
+   }
+   
+ }
 
 

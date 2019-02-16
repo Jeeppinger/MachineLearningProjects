@@ -19,3 +19,8 @@ test_that("knn computes same answer as R", {
   expected.prediction <- cumsum(y[closest.indices])/(1:max.neighbors)
   expect_equal(pred.vec,expected.prediction)
 })
+
+
+test_that("Nearest Neighbor Cross Validation computes same as R", {
+  
+})

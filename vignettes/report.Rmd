@@ -46,7 +46,7 @@ for(data.name in names(data.list)){
   fold.vec <- sample(rep(1:n.folds,l=nrow(one.data.set$feature.mat)))
   for(test.fold in 1:n.folds){
     is.train <- fold.vec != test.fold
-    fit <- NearestNeighborsCV(
+    fit <- NNLearnCV(
     one.data.set$feature.mat[is.train,],
     one.data.set$label.vec[is.train])
     pred.vec<-fit$predict(one.data.set$feature.mat[!is.train,])
