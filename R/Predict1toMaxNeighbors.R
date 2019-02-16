@@ -23,6 +23,9 @@
 #' zip.train[test.i, 1]
 
 knn <- function(x.mat, y.vec, testx.vec, max.neighbors){
+  if((nrow(x.mat)!= length(y.vec) )| (ncol(x.mat)!=length(testx.vec))) {
+    return("Invalid input matrix")
+  }
   result.list <- .C("knn_interface", as.double(x.mat), as.double(y.vec), as.double(testx.vec),
                       as.integer(nrow(x.mat)), as.integer(ncol(x.mat)), as.integer(max.neighbors), 
                       predicitons=double(max.neighbors), PACKAGE="nearestneighbors")
