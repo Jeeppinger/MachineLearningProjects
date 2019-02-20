@@ -1,4 +1,4 @@
-#' Gradient Descent alogrithm
+#' Linear square loss
 #'
 #'A package that computes the k nearest neighbors 
 #'This funciton calls the c interface in the package to calculate the k nearest neighbors for a given set of data
