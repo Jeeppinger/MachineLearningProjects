@@ -9,5 +9,7 @@ int squareLoss(
     const double *train_label_ptr,
     const int max_iterations,
     const double step_size){
+  //TODO: write this loss function and get the R counterpart working by friday
+  
   return 0;
 }

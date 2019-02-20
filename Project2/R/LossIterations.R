@@ -18,3 +18,4 @@ LMSquareLossIterations <- function(x.mat, y.vec,max.iterations ,step.size){
                     as.double(step.size), PACKAGE="linearmodels")
   
 }
+#TODO: set up more functions like above by friday
