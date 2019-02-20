@@ -6,11 +6,20 @@
 void loss_interface(
     const double *train_inputs_ptr, //n_observations x n_features
     const double *train_label_ptr,  //n_observations
-    const double *max_iterations,   //integer
-    const int *step_size            // double
+    const int *max_iterations,   //integer
+    const double *step_size            // double
     ){
-  //int status = knn(train_inputs_ptr,train_label_ptr, test_input_ptr, *n_observations_ptr, *n_features_ptr, *max_neighbors_ptr, test_predictions_ptr);
-  //if(status != 0){
-  //  error("non-zero exit status from knn");
+  
+  int status = squareLoss(train_inputs_ptr,train_label_ptr, *max_iterations, *step_size);
+  if(status != 0){
+    error("non-zero exit status from squareLoss");
   }
-//}
+}
+
+int squareLoss(
+    const double *train_inputs_ptr,
+    const double *train_label_ptr,
+    const int max_iterations,
+    const double step_size){
+ return 0;
+}
