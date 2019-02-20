@@ -14,7 +14,7 @@
 #' @examples
 
 LMSquareLossIterations <- function(x.mat, y.vec,max.iterations ,step.size){
-  weight.vec <- .C("loss_interface", as.double(x.mat), as.double(y.vec), as.integer(max.iterations),
+  w.mat <- .C("loss_interface", as.double(x.mat), as.double(y.vec), as.integer(max.iterations),
                     as.double(step.size), PACKAGE="linearmodels")
   
 }
