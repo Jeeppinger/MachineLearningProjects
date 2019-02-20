@@ -3,4 +3,5 @@ int squareLoss(
     const double *train_label_ptr,  //n_observations (vector)
     const int max_iterations_ptr,    //max iterations (double)
     const double step_size_ptr   //step size (double)
+  
 );
