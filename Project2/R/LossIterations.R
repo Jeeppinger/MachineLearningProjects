@@ -39,9 +39,9 @@ LMSquareLossIterations <- function(x.mat, y.vec,max.iterations ,step.size){
       slope.mat[,index] = slope.vec.temp
       
     }
-    itercept <- -t(slope.mat) %*% x.std.mat %*% mean.vec #m x 1
-    slope.mat <- t(slope.mat) %*% x.std.mat  #m x (p-1)
-    w.mat <- rbind(t(itercept),t(slope.mat)) #p x m
+    itercept <- -t(slope.mat) %*% x.std.mat %*% mean.vec #n x 1 vector
+    slope.mat <- t(slope.mat) %*% x.std.mat  #n x (p-1) matrix
+    w.mat <- rbind(t(itercept),t(slope.mat)) #p x n matrix
     return(w.mat)
   }
   
@@ -83,9 +83,9 @@ LMLogisticLossIterations <- function(x.mat, y.vec,max.iterations ,step.size){
     slope.mat[,index] = slope.vec.temp
     
   }
-  itercept <- -t(slope.mat) %*% x.std.mat %*% mean.vec #m x 1
-  slope.mat <- t(slope.mat) %*% x.std.mat  #m x (p-1)
-  w.mat <- rbind(t(itercept),t(slope.mat)) #p x m
+  itercept <- -t(slope.mat) %*% x.std.mat %*% mean.vec #n x 1 vector
+  slope.mat <- t(slope.mat) %*% x.std.mat  #n x (p-1) matrix
+  w.mat <- rbind(t(itercept),t(slope.mat)) #p x n matrix
   return(w.mat)
 }
 
