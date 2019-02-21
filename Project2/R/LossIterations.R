@@ -29,19 +29,19 @@ LMSquareLossIterations <- function(x.mat, y.vec,max.iterations ,step.size){
     # loop to get the slope matrix
     for (index in (1:max.iterations)){
       if (index == 1){
-        mean.loss.temp.vec <- (2 * t(x.std.mat) %*% 
-                                 (x.std.mat %*% slope.mat[,1])) / num.train
-        slope.vec.temp <- slope.mat[,1] - step.size * mean.loss.temp.vec
+        temp.mean.loss.vec <- (2 * t(x.std.mat) %*% 
+                                 (x.std.mat %*% slope.mat[,1])) / num.row
+        temp.slope.vec <- slope.mat[,1] - step.size * temp.mean.loss.vec
       }else{
-        mean.loss.temp.vec <- (2 * t(x.std.mat) %*% (x.std.mat %*% slope.mat[,index - 1])) / num.train
-        slope.vec.temp <- slope.mat[,index - 1] - step.size * mean.loss.temp.vec
+        temp.mean.loss.vec <- (2 * t(x.std.mat) %*% (x.std.mat %*% slope.mat[,index - 1])) / num.row
+        temp.slope.vec <- slope.mat[,index - 1] - step.size * temp.mean.loss.vec
       }
-      slope.mat[,index] = slope.vec.temp
+      slope.mat[,index] = temp.slope.vec
       
     }
-    itercept <- -t(slope.mat) %*% x.std.mat %*% mean.vec #n x 1 vector
+    itercept.vec <- -t(slope.mat) %*% x.std.mat %*% mean.vec #n x 1 vector
     slope.mat <- t(slope.mat) %*% x.std.mat  #n x (p-1) matrix
-    w.mat <- rbind(t(itercept),t(slope.mat)) #p x n matrix
+    w.mat <- rbind(t(itercept.vec),t(slope.mat)) #p x n matrix
     return(w.mat)
   }
   
@@ -58,7 +58,7 @@ LMSquareLossIterations <- function(x.mat, y.vec,max.iterations ,step.size){
 #' @export
 #'
 #' @examples
-LMLogisticLossIterations <- function(x.mat, y.vec,max.iterations ,step.size){
+LMLogisticLossIterations <- function(x.mat, y.vec,max.iterations, step.size){
   x.mat <- x.mat[,-1] #need to scale x.mat to so standard dev = 1, mean = 0
   num.row <- dim(x.mat)[1]
   num.col <- dim(x.mat)[2]
@@ -74,18 +74,18 @@ LMLogisticLossIterations <- function(x.mat, y.vec,max.iterations ,step.size){
   # loop to get the slope matrix. may need to change this
   for (index in (1:max.iterations)){
     if (index == 1){
-      mean.loss.temp.vec <- (2 * t(x.std.mat) %*% (x.std.mat %*% slope.mat[,1])) / num.train
-      slope.vec.temp <- slope.mat[,1] - step.size * mean.loss.temp.vec
+      temp.mean.loss.vec <- (2 * t(x.std.mat) %*% (x.std.mat %*% slope.mat[,1])) / num.row
+      temp.slope.vec <- slope.mat[,1] - step.size * temp.mean.loss.vec
     }else{
-      mean.loss.temp.vec <- (2 * t(x.std.mat) %*% (x.std.mat %*% slope.mat[,index - 1])) / num.train
-      slope.vec.temp <- slope.mat[,index - 1] - step.size * mean.loss.temp.vec
+      temp.mean.loss.vec <- (2 * t(x.std.mat) %*% (x.std.mat %*% slope.mat[,index - 1])) / num.row
+      temp.slope.vec <- slope.mat[,index - 1] - step.size * temp.mean.loss.vec
     }
-    slope.mat[,index] = slope.vec.temp
+    slope.mat[,index] = temp.slope.vec
     
   }
-  itercept <- -t(slope.mat) %*% x.std.mat %*% mean.vec #n x 1 vector
+  itercept.vec <- -t(slope.mat) %*% x.std.mat %*% mean.vec #n x 1 vector
   slope.mat <- t(slope.mat) %*% x.std.mat  #n x (p-1) matrix
-  w.mat <- rbind(t(itercept),t(slope.mat)) #p x n matrix
+  w.mat <- rbind(t(itercept.vec),t(slope.mat)) #p x n matrix
   return(w.mat)
 }
 
