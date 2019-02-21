@@ -33,10 +33,10 @@ LMSquareLossIterations <- function(x.mat, y.vec,max.iterations ,step.size){
                                  (x.std.mat %*% slope.mat[,1])) / num.train
         slope.vec.temp <- slope.mat[,1] - step.size * mean.loss.temp.vec
       }else{
-        mean.loss.temp.vec <- (2 * t(x.std.mat) %*% (x.std.mat %*% slope.mat[,iter.index - 1])) / num.train
-        slope.vec.temp <- slope.mat[,iter.index - 1] - step.size * mean.loss.temp.vec
+        mean.loss.temp.vec <- (2 * t(x.std.mat) %*% (x.std.mat %*% slope.mat[,index - 1])) / num.train
+        slope.vec.temp <- slope.mat[,index - 1] - step.size * mean.loss.temp.vec
       }
-      slope.mat[,iter.index] = slope.vec.temp
+      slope.mat[,index] = slope.vec.temp
       
     }
     itercept <- -t(slope.mat) %*% x.std.mat %*% mean.vec #m x 1
@@ -71,17 +71,16 @@ LMLogisticLossIterations <- function(x.mat, y.vec,max.iterations ,step.size){
   x.std.mat <- (t(x.mat) - mean.vec) / x.scaled.vec
   slope.mat <- matrix(c(rep(0, num.col * max.iterations), num.col, max.iterations)) 
   
-  # loop to get the slope matrix
+  # loop to get the slope matrix. may need to change this
   for (index in (1:max.iterations)){
     if (index == 1){
-      mean.loss.temp.vec <- (2 * t(x.std.mat) %*% 
-                               (x.std.mat %*% slope.mat[,1])) / num.train
+      mean.loss.temp.vec <- (2 * t(x.std.mat) %*% (x.std.mat %*% slope.mat[,1])) / num.train
       slope.vec.temp <- slope.mat[,1] - step.size * mean.loss.temp.vec
     }else{
-      mean.loss.temp.vec <- (2 * t(x.std.mat) %*% (x.std.mat %*% slope.mat[,iter.index - 1])) / num.train
-      slope.vec.temp <- slope.mat[,iter.index - 1] - step.size * mean.loss.temp.vec
+      mean.loss.temp.vec <- (2 * t(x.std.mat) %*% (x.std.mat %*% slope.mat[,index - 1])) / num.train
+      slope.vec.temp <- slope.mat[,index - 1] - step.size * mean.loss.temp.vec
     }
-    slope.mat[,iter.index] = slope.vec.temp
+    slope.mat[,index] = slope.vec.temp
     
   }
   itercept <- -t(slope.mat) %*% x.std.mat %*% mean.vec #m x 1
