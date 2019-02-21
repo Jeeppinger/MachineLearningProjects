@@ -13,3 +13,12 @@ int squareLoss(
   
   return 0;
 }
+int logisticLoss(
+    const double *train_inputs_ptr,
+    const double *train_label_ptr,
+    const int max_iterations,
+    const double step_size){
+  //TODO: write this loss function and get the R counterpart working by friday
+  
+  return 0;
+}
