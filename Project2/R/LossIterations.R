@@ -20,29 +20,30 @@ LMSquareLossIterations <- function(x.mat, y.vec,max.iterations ,step.size){
     
     mean.vec <- colMeans(x.mat)
     
-    x.scaled.vec <- sqrt(rowSums((t(x.mat) - mean.vec)^2) / num.row)
-    x.scaled.mat <- diag(num.feature) * (1/x.scaled.vec)
+    x.standard.vec <- sqrt(rowSums((t(x.mat) - mean.vec)^2) / num.row)
+    x.standars.mat <- diag(num.row) * (1/x.standard.vec)
     
-    x.std.mat <- (t(x.mat) - mean.vec) / x.scaled.vec
+    x.scaled.mat <- (t(x.standard.mat) - mean.vec) / x.standard.vec
     slope.mat <- matrix(c(rep(0, num.col * max.iterations), num.col, max.iterations)) 
     
     # loop to get the slope matrix
     for (index in (1:max.iterations)){
       if (index == 1){
-        temp.mean.loss.vec <- (2 * t(x.std.mat) %*% 
-                                 (x.std.mat %*% slope.mat[,1])) / num.row
+        temp.mean.loss.vec <- (2 * t(x.scaled.mat) %*% 
+                                 (x.scaled.mat %*% slope.mat[,1])) / num.row
         temp.slope.vec <- slope.mat[,1] - step.size * temp.mean.loss.vec
       }else{
-        temp.mean.loss.vec <- (2 * t(x.std.mat) %*% (x.std.mat %*% slope.mat[,index - 1])) / num.row
+        temp.mean.loss.vec <- (2 * t(x.scaled.mat) %*% (x.scaled.mat %*% slope.mat[,index - 1])) / num.row
         temp.slope.vec <- slope.mat[,index - 1] - step.size * temp.mean.loss.vec
       }
       slope.mat[,index] = temp.slope.vec
       
     }
-    itercept.vec <- -t(slope.mat) %*% x.std.mat %*% mean.vec #n x 1 vector
-    slope.mat <- t(slope.mat) %*% x.std.mat  #n x (p-1) matrix
-    w.mat <- rbind(t(itercept.vec),t(slope.mat)) #p x n matrix
+    itercept.vec <- -t(slope.mat) %*% x.scaled.mat %*% mean.vec #n x 1 vector
+    slope.mat <- t(slope.mat) %*% x.scaled.mat  #n x (p-1) matrix
+    w.mat <- rbind(t(itercept.vec),t(slope.mat)) #(p-1 x n) + (1xn) = p x n matrix
     return(w.mat)
+    #X.mat %*% W.mat should get a prediction matrix
   }
   
 
@@ -65,28 +66,30 @@ LMLogisticLossIterations <- function(x.mat, y.vec,max.iterations, step.size){
   
   mean.vec <- colMeans(x.mat)
   
-  x.scaled.vec <- sqrt(rowSums((t(x.mat) - mean.vec)^2) / num.row)
-  x.scaled.mat <- diag(num.feature) * (1/x.scaled.vec)
+  x.standard.vec <- sqrt(rowSums((t(x.mat) - mean.vec)^2) / num.row)
+  x.standars.mat <- diag(num.row) * (1/x.standard.vec)
   
-  x.std.mat <- (t(x.mat) - mean.vec) / x.scaled.vec
+  x.scaled.mat <- (t(x.standard.mat) - mean.vec) / x.standard.vec
   slope.mat <- matrix(c(rep(0, num.col * max.iterations), num.col, max.iterations)) 
   
-  # loop to get the slope matrix. may need to change this
+  # loop to get the slope matrix
   for (index in (1:max.iterations)){
     if (index == 1){
-      temp.mean.loss.vec <- (2 * t(x.std.mat) %*% (x.std.mat %*% slope.mat[,1])) / num.row
+      temp.mean.loss.vec <- (2 * t(x.scaled.mat) %*% 
+                               (x.scaled.mat %*% slope.mat[,1])) / num.row
       temp.slope.vec <- slope.mat[,1] - step.size * temp.mean.loss.vec
     }else{
-      temp.mean.loss.vec <- (2 * t(x.std.mat) %*% (x.std.mat %*% slope.mat[,index - 1])) / num.row
+      temp.mean.loss.vec <- (2 * t(x.scaled.mat) %*% (x.scaled.mat %*% slope.mat[,index - 1])) / num.row
       temp.slope.vec <- slope.mat[,index - 1] - step.size * temp.mean.loss.vec
     }
     slope.mat[,index] = temp.slope.vec
     
   }
-  itercept.vec <- -t(slope.mat) %*% x.std.mat %*% mean.vec #n x 1 vector
-  slope.mat <- t(slope.mat) %*% x.std.mat  #n x (p-1) matrix
-  w.mat <- rbind(t(itercept.vec),t(slope.mat)) #p x n matrix
+  itercept.vec <- -t(slope.mat) %*% x.scaled.mat %*% mean.vec #n x 1 vector
+  slope.mat <- t(slope.mat) %*% x.scaled.mat  #n x (p-1) matrix
+  w.mat <- rbind(t(itercept.vec),t(slope.mat)) #(p-1 x n) + (1xn) = p x n matrix
   return(w.mat)
+  #X.mat %*% W.mat should get a prediction matrix
 }
 
 #TODO: set up more functions like above by friday
