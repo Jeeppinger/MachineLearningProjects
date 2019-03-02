@@ -71,7 +71,6 @@ LMLogisticLossL2 <- function(x.mat, y.vec, max.iterations, step.size) {
     w.vec <- w.mat[,0]
     b.vec <- rep(0,l = max.iterations)
     b.temp <- 0 
-    
     # loop through all iterations
     for (num.interations in (1:max.iterations)) {
       #these come from the notes in class
