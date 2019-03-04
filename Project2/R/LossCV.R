@@ -106,7 +106,6 @@ LMLogisticLossL2CV <- function(x.mat, y.vec, fold.vec, penalty.vec) {
   
   prediction <- function(test.mat) {
     prediction.vec <- test %*% t(w.vec)
-    return(prediction)
   }
   
   result.list <- list(
