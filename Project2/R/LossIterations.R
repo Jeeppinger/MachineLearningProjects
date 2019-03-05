@@ -43,7 +43,7 @@ LMSquareLossIterations <- function(x.mat, y.vec,max.iterations ,step.size){
     slope.mat <- t(slope.mat) %*% x.scaled.mat  #n x (p-1) matrix
     w.mat <- rbind(t(itercept.vec),t(slope.mat)) #(p-1 x n) + (1xn) = p x n matrix
     return(w.mat)
-    #X.mat %*% W.mat should get a prediction matrix
+    #x.mat %*% w.mat should get a prediction matrix
   }
   
 
