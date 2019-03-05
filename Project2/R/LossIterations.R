@@ -13,7 +13,7 @@
 #'
 #' @examples
 
-LMSquareLossL2 <- function(x.mat, y.vec,max.iterations ,step.size){
+LMSquareLossIterations <- function(x.mat, y.vec,max.iterations ,step.size){
     x.mat <- x.mat[,-1] #need to scale x.mat to so standard dev = 1, mean = 0
     num.row <- dim(x.mat)[1]
     num.col <- dim(x.mat)[2]
@@ -61,7 +61,7 @@ LMSquareLossL2 <- function(x.mat, y.vec,max.iterations ,step.size){
 #' @examples
 #' 
 
-LMLogisticLossL2 <- function(x.mat, y.vec, max.iterations, step.size) {
+LMLogisticLossIterations <- function(x.mat, y.vec, max.iterations, step.size) {
     # TODO: add error checking
     
     x.scaled.mat <- scale(x.mat)
