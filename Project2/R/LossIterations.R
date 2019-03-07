@@ -35,9 +35,9 @@ LMSquareLossIterations <-
       
   }
 
-    mean.vec <- colMeans(x.mat)
-    x.std.vec <-sqrt(rowSums((t(x.mat) - mean.vec) ^ 2) / num.train)
-    x.std.mat <- diag(num.feature) * (1 / x.std.vec)
+    mean.vec <- colMeans(x.mat) # 1 x p
+    x.stddev.vec <-sqrt(rowSums((t(x.mat) - mean.vec) ^ 2) / num.train) 
+    x.stddev.mat <- diag(num.feature) * (1 / x.stddev.vec)
 
     itercept <- -t(slope.mat) %*% x.stddev.mat %*% mean.vec #max iteration x 1
     slope <- t(slope.mat) %*% x.stddev.mat  #max iteration x p
