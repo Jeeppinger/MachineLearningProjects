@@ -13,28 +13,26 @@
 #'
 #' @examples
 
-LMSquareLossIterations <-
-  function(x.mat, y.vec, max.iterations, step.size = 0.5) {
+LMSquareLossIterations <-function(x.mat, y.vec, max.iterations, step.size = 0.5) {
     num.train <- nrow(x.mat)
     num.feature <- ncol(x.mat)
     
     x.scaled.mat <- scale(x.mat)
-    slope.mat <-matrix(c(rep(0, num.feature * max.iterations), num.feature, max.iterations)) #p x max iteration
+    slope.mat <-matrix(c(rep(0, num.feature * max.iterations)), num.feature, max.iterations) #p x max iteration
     
     # loop to populate slope.mat 
     for (index in (1:max.iterations)) {
-      if (index == 1){ 
-        temp.mean.loss.vec <- (2 * t(x.scaled.mat) %*%(x.scaled.mat %*% slope.mat[, 1] - y.vec)) / num.train
-        #thinking of above as 2*x^t(x-...) should be nonzero
-        temp.slope.vec <-slope.mat[, 1] - step.size * temp.mean.loss.vec
-      }else{
-        temp.mean.loss.vec <- (2 * t(x.scaled.mat) %*%(x.scaled.mat %*% slope.mat[, index - 1] - y.vec)) / num.train
-        temp.slope.vec <-slope.mat[,index - 1] - step.size * temp.mean.loss.vec
-      }
+      #if (index == 1){ 
+       # temp.mean.loss.vec <- (2 * t(x.scaled.mat) %*%(x.scaled.mat %*% slope.mat[, 1] - y.vec)) / num.train
+        #temp.slope.vec <-slope.mat[, 1] - step.size * temp.mean.loss.vec
+      #}else{
+      temp.mean.loss.vec <- (2 * t(x.scaled.mat) %*%(x.scaled.mat %*% slope.mat[, index] - y.vec)) / num.train
+      temp.slope.vec <-slope.mat[,index] - step.size * temp.mean.loss.vec
+      #}
       slope.mat[, index] = temp.slope.vec
       
-  }
-
+    }
+    
     mean.vec <- colMeans(x.mat) # 1 x p
     x.stddev.vec <-sqrt(rowSums((t(x.mat) - mean.vec) ^ 2) / num.train) 
     x.stddev.mat <- diag(num.feature) * (1 / x.stddev.vec)
