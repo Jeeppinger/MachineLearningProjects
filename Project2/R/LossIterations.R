@@ -22,13 +22,8 @@ LMSquareLossIterations <-function(x.mat, y.vec, max.iterations, step.size = 0.5)
     
     # loop to populate slope.mat 
     for (index in (1:max.iterations)) {
-      #if (index == 1){ 
-       # temp.mean.loss.vec <- (2 * t(x.scaled.mat) %*%(x.scaled.mat %*% slope.mat[, 1] - y.vec)) / num.train
-        #temp.slope.vec <-slope.mat[, 1] - step.size * temp.mean.loss.vec
-      #}else{
-      temp.mean.loss.vec <- (2 * t(x.scaled.mat) %*%(x.scaled.mat %*% slope.mat[, index] - y.vec)) / num.train
+      temp.mean.loss.vec <- (2 * t(x.scaled.mat) %*%(x.scaled.mat %*% slope.mat[, index] - as.matrix(y.vec))) / num.train
       temp.slope.vec <-slope.mat[,index] - step.size * temp.mean.loss.vec
-      #}
       slope.mat[, index] = temp.slope.vec
       
     }
@@ -64,7 +59,6 @@ LMLogisticLossIterations <- function(x.mat, y.vec, max.iterations, step.size) {
     # TODO: add error checking
     
     x.scaled.mat <- scale(x.mat)
-    
     # Initialize weight matrix (w) and beta (b)
     w.mat <- matrix(0, nrow = ncol(x.mat), ncol = max.iterations)
     w.vec <- w.mat[,0]

@@ -11,11 +11,11 @@
 #'
 #' @examples
 LMSquareLossL2 <-function(x.scaled.mat, y.vec, penalty, optimal.thresh = 0.5, initial.weight.vec) {
-  #1/2 is a good defauly optimal thresh  
+  #1/2 is a good default optimal thresh  
   current.weight.vec <- initial.weight.vec
     # loop until we are in the optimal threshold
     while (TRUE) {
-      grad.cost <- 2* t(x.scaled.mat) %*%(x.scaled.mat %*% weight.vec - y.vec) + 2 * penalty * current.weight.vec
+      grad.cost <- 2* t(x.scaled.mat) %*%(x.scaled.mat %*% current.weight.vec - as.matrix(y.vec)) + 2 * penalty * current.weight.vec
       #the above formula was derived in class notes
       if (sum(abs(grad.cost)) <= optimal.thresh) {
         break#stop because we are in the threshold
