@@ -75,18 +75,17 @@ LMLogisticLossIterations <- function(x.mat, y.vec, max.iterations, step.size) {
     x.scaled.mat <- scale(x.mat)
     # Initialize weight matrix (w) and beta (b)
     w.mat <- matrix(0, nrow = ncol(x.mat), ncol = max.iterations)
-    w.vec <- w.mat[,1]
+    w.vec <- matrix(0, nrow = ncol(x.mat), ncol = 1)
     b.vec <- rep(0,l = max.iterations)
     b.temp <- 0 
     # loop through all iterations
     for (num.interations in (1:max.iterations)) {
       #these come from the notes in class
-      w.grad.vec <- -t(x.scaled.mat) %*% as.matrix(y.vec) / (1 + exp(y.vec * (x.scaled.mat %*% w.vec + b.temp)))
+      w.grad.vec <- -t(x.scaled.mat) %*% as.matrix(y.vec) / as.double((as.matrix(1) + exp(as.vector(y.vec) %*% (x.scaled.mat %*% w.vec))))#used to add b.temp
       
-      b.grad <- - sum(y.vec) / (1 + exp(y.vec * (x.scaled.mat %*% w.vec + b.temp)))
-      
-      # Take one step along gradient
-      w.mat[,num.iterations] <-wvec - step.size * w.grad.vec
+      b.grad <- - sum(y.vec) / (as.matrix(1) + exp(as.vector(y.vec) %*% (x.scaled.mat %*% w.vec)))#used to add b.temp
+      w.grad.vec<-b.grad
+      w.mat[,num.iterations] <-w.vec - step.size * w.grad.vec
       b.vec[num.iterations] <- b.temp - step.size * b.grad
       
       w.vec <- w.mat[,num.interations]
@@ -104,4 +103,4 @@ LMLogisticLossIterations <- function(x.mat, y.vec, max.iterations, step.size) {
     return(w.mat)
     
     
-  }
+}
