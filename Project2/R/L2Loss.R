@@ -48,11 +48,11 @@ LMLogisticLossL2 <- function(X.scaled.mat, y.vec, penalty, optimal.thresh, initi
     
     optimal.weight.vec = initial.weight.vec
     
-    loss.vec <- -t(x.scaled.mat) %*% y.vec / (1 + exp(y.vec * (x.scaled.mat %*% optimal.weight.vec)))
+    loss.vec <- -t(x.scaled.mat) %*% as.matrix(y.vec) / (1 + exp(y.vec * (x.scaled.mat %*% optimal.weight.vec)))
     cost.vec <- loss.vec + penalty * optimal.weight.vec #L1 norm
     
     while (norm(abs(cost.vec)) > optimal.thresh){ #while the cost is out of the threshold 
-      loss.vec <- -t(x.scaled.mat) %*% y.vec / (1 + exp(y.vec * (x.scaled.mat %*% optimal.weight.vec)))
+      loss.vec <- -t(x.scaled.mat) %*% as.matrix(y.vec) / (1 + exp(y.vec * (x.scaled.mat %*% optimal.weight.vec)))
       cost.vec <- loss.vec + penalty * optimal.weight.vec #L1 norm
       optimal.weight.vec <- optimal.weight.vec - step.size * cost.vec #L1 norm
     }
