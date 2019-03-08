@@ -37,9 +37,10 @@ LMSquareLossIterations <-function(x.mat, y.vec, max.iterations, step.size = 0.5)
     x.stddev.vec <-sqrt(rowSums((t(x.mat) - mean.vec) ^ 2) / num.train) 
     x.stddev.mat <- diag(num.feature) * (1 / x.stddev.vec)
 
-    itercept <- -t(slope.mat) %*% x.stddev.mat %*% mean.vec #max iteration x 1
+    intercept <- -t(slope.mat) %*% x.stddev.mat %*% mean.vec #max iteration x 1
     slope <- t(slope.mat) %*% x.stddev.mat  #max iteration x p
-    w.mat <- rbind(t(itercept), t(slope)) #p + 1 x max iteration
+    w.mat <- rbind(t(intercept), t(slope)) #p + 1 x max iteration
+    
     return(w.mat)
     #x.mat %*% w.mat should get a prediction matrix
   }
@@ -72,9 +73,9 @@ LMLogisticLossIterations <- function(x.mat, y.vec, max.iterations, step.size) {
     # loop through all iterations
     for (num.interations in (1:max.iterations)) {
       #these come from the notes in class
-      w.grad.vec <- -t(x.scaled.mat) %*% y.vec / (1 + exp(y.vec * (x.scaled.mat %*% w.vec + b.temp)))
+      w.grad.vec <- -t(x.scaled.mat) %*% as.matrix(y.vec) / (1 + exp(y.vec * (x.scaled.mat %*% w.vec + b.temp)))
       
-      b.grad <- -sum(y.vec) / (1 + exp(y.vec * (x.scaled.mat %*% w.vec + b.temp)))
+      b.grad <- - sum(y.vec) / (1 + exp(y.vec * (x.scaled.mat %*% w.vec + b.temp)))
       
       # Take one step along gradient
       w.mat[,num.iterations] <-wvec - step.size * w.grad.vec
