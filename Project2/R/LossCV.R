@@ -3,12 +3,21 @@
 #' @param x.mat a matrix of size [n x p]
 #' @param y.vec a vector of length n
 #' @param fold.vec a vector of length n
-#' @param penalty.vec a number > 0
+#' @param penalty.vec a vector of penalties
 #'
 #' @return results.list a list with mean.validation.loss.vec, mean.train.loss.vec, penalty.vec, selected.penalty, weight.vec, and predict function
 #' @export
 #'
 #' @examples
+#' data <- data(prostate, package="ElemStatLearn")
+#' data.set<-prostate[,-dim(prostate)[2]]
+#' x.mat<-as.matrix(data.set[,-dim(data.set)[2]])
+#' y.vec<-as.matrix(data.set[,dim(data.set)[2]])
+#' max.iterations=10
+#' fold.vec<-sample(rep(1:5,l=nrow(x.mat)))
+
+# penalty.vec <-
+# LMSquareLossL2CV(x.mat,y.vec,fold.vec,penalty.vec)
 LMSquareLossL2CV <- function(x.mat, y.vec, fold.vec, penalty.vec) {
   num.folds <- length(unique(fold.vec))
   
@@ -74,6 +83,15 @@ LMSquareLossL2CV <- function(x.mat, y.vec, fold.vec, penalty.vec) {
 #' @export
 #'
 #' @examples
+#' data <- data(spam, package="ElemStatLearn")
+#' data.set<-spam[,-dim(spam)[2]]
+#' x.mat<-as.matrix(data.set[,-dim(data.set)[2]])
+#' y.vec<-as.matrix(data.set[,dim(data.set)[2]])
+#' max.iterations=10
+#' fold.vec<-sample(rep(1:5,l=nrow(x.mat)))
+
+# penalty.vec <-
+# LMLogisticLossL2CV(x.mat,y.vec,fold.vec,penalty.vec)
 LMLogisticLossL2CV <- function(x.mat, y.vec, fold.vec, penalty.vec) {
   train.loss.mat <-matrix(0, nrow(x.mat), ncol(x.mat))
   validation.loss.mat <-matrix(0, nrow(x.mat), ncol(x.mat))

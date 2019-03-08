@@ -10,6 +10,13 @@
 #' @export
 #'
 #' @examples
+#' data <- data(prostate, package="ElemStatLearn")
+#' data.set<-prostate[,-dim(prostate)[2]]
+#' x.mat<-as.matrix(data.set[,-dim(data.set)[2]])
+#' y.vec<-as.matrix(data.set[,dim(data.set)[2]])
+#' max.iterations=10
+#' fold.vec<-sample(rep(1:5,l=nrow(x.mat)))
+#' LMSquareLossIterations(x.mat,y.vec,fold.vec,max.iterations)
 LMSquareLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec, max.iteration) {
     # Find the num of K-fold
     num.folds <- length(unique(fold.vec))
@@ -78,6 +85,15 @@ LMSquareLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec, max.iteration) {
 #' @export
 #'
 #' @examples
+#' data <- data(spam, package="ElemStatLearn")
+#' data.set<-spam[,-dim(spam)[2]]
+#' x.mat<-as.matrix(data.set[,-dim(data.set)[2]])
+#' y.vec<-as.matrix(data.set[,dim(data.set)[2]])
+#' max.iterations=10
+#' fold.vec<-sample(rep(1:5,l=nrow(x.mat)))
+
+
+# LMLogisticLossIterations(x.mat,y.vec,fold.vec,max.iterations)
 LMLogisticLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec = NULL, max.iteration, step.size = 0.5) {
     
     num.folds <- length(unique(fold.vec))

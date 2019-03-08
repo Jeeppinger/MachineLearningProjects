@@ -12,8 +12,16 @@
 #' @export
 #'
 #' @examples
-
+#' data <- data(prostate, package="ElemStatLearn")
+#' data.set<-prostate[,-dim(prostate)[2]]
+#' x.mat<-as.matrix(data.set[,-dim(data.set)[2]])
+#' y.vec<-as.matrix(data.set[,dim(data.set)[2]])
+#' max.iterations=10
+#' LMSquareLossIterations(x.mat,y.vec,max.iterations)
 LMSquareLossIterations <-function(x.mat, y.vec, max.iterations, step.size = 0.5) {
+    if(class(x.mat)!="matrix" || class(y.vec)!="matrix"){
+      return("bad input")
+    }
     num.train <- nrow(x.mat)
     num.feature <- ncol(x.mat)
     
@@ -53,7 +61,14 @@ LMSquareLossIterations <-function(x.mat, y.vec, max.iterations, step.size = 0.5)
 #' @export
 #'
 #' @examples
-#' 
+#' data <- data(spam, package="ElemStatLearn")
+#' data.set<-spam[,-dim(spam)[2]]
+#' x.mat<-as.matrix(data.set[,-dim(data.set)[2]])
+#' y.vec<-as.matrix(data.set[,dim(data.set)[2]])
+#' max.iterations=10
+
+# LMLogisticLossIterations(x.mat,y.vec,max.iterations)
+# put ' when this works
 
 LMLogisticLossIterations <- function(x.mat, y.vec, max.iterations, step.size) {
     # TODO: add error checking
@@ -61,7 +76,7 @@ LMLogisticLossIterations <- function(x.mat, y.vec, max.iterations, step.size) {
     x.scaled.mat <- scale(x.mat)
     # Initialize weight matrix (w) and beta (b)
     w.mat <- matrix(0, nrow = ncol(x.mat), ncol = max.iterations)
-    w.vec <- w.mat[,0]
+    w.vec <- w.mat[,1]
     b.vec <- rep(0,l = max.iterations)
     b.temp <- 0 
     # loop through all iterations
