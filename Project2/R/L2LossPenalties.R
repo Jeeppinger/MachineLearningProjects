@@ -8,6 +8,13 @@
 #' @export
 #'
 #' @examples
+#' data <- data(prostate, package="ElemStatLearn")
+#' data.set<-prostate[,-dim(prostate)[2]]
+#' x.mat<-as.matrix(data.set[,-dim(data.set)[2]])
+#' y.vec<-as.matrix(data.set[,dim(data.set)[2]])
+
+# penalty.vec <-
+# LMSquareLossL2penalties(x.mat,y.vec,penalty.vec)
 LMSquareLossL2penalties <- function(x.mat, y.vec, penalty.vec) {
   
   #first scale x
@@ -43,6 +50,13 @@ LMSquareLossL2penalties <- function(x.mat, y.vec, penalty.vec) {
 #' @export
 #'
 #' @examples
+#' data <- data(spam, package="ElemStatLearn")
+#' data.set<-spam[,-dim(spam)[2]]
+#' x.mat<-as.matrix(data.set[,-dim(data.set)[2]])
+#' y.vec<-as.matrix(data.set[,dim(data.set)[2]])
+
+# penalty.vec <-
+# LMLogisticLossL2penalties(x.mat,y.vec,penalty.vec)
 LMLogisticLossL2penalties <- function(x.mat, y.vec, penalty.vec) {
 
   #first scale x

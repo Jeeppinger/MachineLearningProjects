@@ -73,7 +73,7 @@ LMSquareLossL2CV <- function(x.mat, y.vec, fold.vec, penalty.vec) {
 
 #' Cross validation for linear model using L2 regularization / logistic loss
 #'
-#' @param X.mat a  matrix of size [n x p]
+#' @param x.mat a  matrix of size [n x p]
 #' @param y.vec a of length n
 #' @param fold.vec a vector of length n
 #' @param penalty.vec a vector > 0
@@ -112,7 +112,7 @@ LMLogisticLossL2CV <- function(x.mat, y.vec, fold.vec, penalty.vec) {
       if (trainvalid.split == "train") {
         train.loss.mat[fold.index, ] <-colMeans(x.mat[validation.index,] %*% w.mat - y.vec[validation.index])
       } else{#validation
-        validation.loss.mat[fold.index, ] <-colMeans(X.mat[validation.index,] %*% w.mat - y.vec[validation.index])
+        validation.loss.mat[fold.index, ] <-colMeans(x.mat[validation.index,] %*% w.mat - y.vec[validation.index])
       }
     }
   }

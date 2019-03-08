@@ -1,5 +1,4 @@
 #' Linear square loss
-#'
 #'A package that computes information about linearmodels and regression 
 #'This funciton uses R functions to calculate the square loss for a given set of data
 #'

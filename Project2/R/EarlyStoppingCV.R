@@ -3,7 +3,7 @@
 #' @param x.mat matrix of size [n x p]
 #' @param y.vec vector of size n
 #' @param fold.vec folds for CV split
-#' @param max.iterations integer > 1
+#' @param max.iteration integer > 1
 #'
 #' @return results.list a list with mean.validation.loss.vec, mean.train.loss.vec, selected.steps, weight.vec, and predict function
 #'
@@ -14,9 +14,10 @@
 #' data.set<-prostate[,-dim(prostate)[2]]
 #' x.mat<-as.matrix(data.set[,-dim(data.set)[2]])
 #' y.vec<-as.matrix(data.set[,dim(data.set)[2]])
-#' max.iterations=10
+#' max.iteration=10
 #' fold.vec<-sample(rep(1:5,l=nrow(x.mat)))
-#' LMSquareLossIterations(x.mat,y.vec,fold.vec,max.iterations)
+
+# LMSquareLossIterations(x.mat,y.vec,fold.vec,max.iteration)
 LMSquareLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec, max.iteration) {
     # Find the num of K-fold
     num.folds <- length(unique(fold.vec))
@@ -52,7 +53,7 @@ LMSquareLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec, max.iteration) {
     mean.validation.loss.vec <- colMeans(validation.loss.mat)
     
     selected.steps <- which.min(mean.validation.loss.vec)
-    w.mat <- LMSquareLossIterations(x.mat, y.vec, max.iterations = selected.steps)
+    w.mat <- LMSquareLossIterations(x.mat, y.vec, max.iteration = selected.steps)
     w.vec <- x.mat[, selected.steps]
     
     prediction <- function(test.mat) {
@@ -76,7 +77,7 @@ LMSquareLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec, max.iteration) {
 #' @param x.mat matrix of size [n x p]
 #' @param y.vec of size n
 #' @param fold.vec fold vector of size n
-#' @param max.iterations integer > 1
+#' @param max.iteration integer > 1
 #' @param step.size a number > 0, usually around .5
 
 #'
@@ -89,11 +90,11 @@ LMSquareLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec, max.iteration) {
 #' data.set<-spam[,-dim(spam)[2]]
 #' x.mat<-as.matrix(data.set[,-dim(data.set)[2]])
 #' y.vec<-as.matrix(data.set[,dim(data.set)[2]])
-#' max.iterations=10
+#' max.iteration=10
 #' fold.vec<-sample(rep(1:5,l=nrow(x.mat)))
 
 
-# LMLogisticLossIterations(x.mat,y.vec,fold.vec,max.iterations)
+# LMLogisticLossIterations(x.mat,y.vec,fold.vec,max.iteration)
 LMLogisticLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec = NULL, max.iteration, step.size = 0.5) {
     
     num.folds <- length(unique(fold.vec))
