@@ -19,6 +19,9 @@
 #' LMSquareLossEarlyStoppingCV(x.mat,y.vec,fold.vec,max.iteration)
 
 LMSquareLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec, max.iteration) {
+    if(class(x.mat)!="matrix"){
+      return("bad input")
+    }
     # Find the num of K-fold
     num.folds <- length(unique(fold.vec))
     
@@ -95,7 +98,9 @@ LMSquareLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec, max.iteration) {
 
 # LMLogisticLossIterations(x.mat,y.vec,fold.vec,max.iteration)
 LMLogisticLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec = NULL, max.iteration, step.size = 0.5) {
-    
+    if(class(x.mat)!="matrix"){
+      return("bad input")
+    }
     num.folds <- length(unique(fold.vec))
     
     train.loss.mat <-matrix(0, nrow = num.folds, ncol = max.iteration)
@@ -138,8 +143,8 @@ LMLogisticLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec = NULL, max.iter
     
     
     results.list <-list(
-        mean.validation.loss = mean.validation.loss.vec,
-        mean.train.loss = mean.train.loss.vec,
+        mean.validation.loss = mean.validation.loss,
+        mean.train.loss = mean.train.loss,
         selected.steps = selected.steps,
         w.vec = w.vec,
         prediction = predict

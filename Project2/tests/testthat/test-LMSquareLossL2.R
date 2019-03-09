@@ -11,7 +11,7 @@ test_that("LMSquareLossL2 gives well formatted output", {
   max.iterations=10
   w.vec <- LMLogisticLossIterations(x.mat,y.vec,max.iterations)[,9]
   LMSquareLossL2(x.mat,y.vec,penalty,initial.weight.vec=w.vec)
-  expect_equal(class(w.vec),"matrix")
+  expect_equal(class(w.vec),"numeric")
 })
 
 test_that("LMSquareLossL2 fails gracefully on bad input", {
@@ -20,6 +20,6 @@ test_that("LMSquareLossL2 fails gracefully on bad input", {
   max.iterations <- 0
   w.vec <- 0
   penalty<-0
-  LMSquareLossL2(x.mat,y.vec,penalty,initial.weight.vec=w.vec)
+  w.mat<-LMSquareLossL2(x.mat,y.vec,penalty,initial.weight.vec=w.vec)
   expect_equal(w.mat,"bad input")
 })

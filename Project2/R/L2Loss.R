@@ -20,6 +20,9 @@
 
 # LMSquareLossL2(x.mat,y.vec,penalty,initial.weight.vec=w.mat[,9])
 LMSquareLossL2 <-function(x.scaled.mat, y.vec, penalty, optimal.thresh = 0.5, initial.weight.vec) {
+  if(class(x.scaled.mat)!="matrix"){
+    return("bad input")
+  }
   #1/2 is a good default optimal thresh  
   current.weight.vec <- initial.weight.vec
     # loop until we are in the optimal threshold
@@ -41,7 +44,7 @@ LMSquareLossL2 <-function(x.scaled.mat, y.vec, penalty, optimal.thresh = 0.5, in
 
 #' Linear model L2 regularization with logistic loss
 #'
-#' @param X.scaled.mat a matrix of size [n x p] with mean = 0, stddev = 1
+#' @param x.scaled.mat a matrix of size [n x p] with mean = 0, stddev = 1
 #' @param y.vec a vector of size n
 #' @param penalty a scalar > 0
 #' @param optimal.thresh a positive numeric scalar
@@ -57,11 +60,12 @@ LMSquareLossL2 <-function(x.scaled.mat, y.vec, penalty, optimal.thresh = 0.5, in
 #' y.vec<-as.matrix(data.set[,dim(data.set)[2]])
 #' penalty<-5
 #' max.iterations=10
-#'w.vec <- LMLogisticLossIterations(x.mat,y.vec,max.iterations)[,9]
- 
-#LMLogisticLossL2(x.mat,y.vec,penalty,initial.weight.vec=w.mat[,9])
+#' w.vec <- LMLogisticLossIterations(x.mat,y.vec,max.iterations)[,9]
+#' LMLogisticLossL2(x.mat,y.vec,penalty,initial.weight.vec=w.vec)
 LMLogisticLossL2 <- function(x.scaled.mat, y.vec, penalty, optimal.thresh, initial.weight.vec){
-    
+    if(class(x.scaled.mat)!="matrix"){
+      return("bad input")
+    }
     step.size <- 0.5
     max.iterations <- 100 
     

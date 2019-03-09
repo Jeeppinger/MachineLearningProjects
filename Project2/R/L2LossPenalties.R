@@ -16,11 +16,13 @@
 # penalty.vec <-
 # LMSquareLossL2penalties(x.mat,y.vec,penalty.vec)
 LMSquareLossL2penalties <- function(x.mat, y.vec, penalty.vec) {
-  
+  if(class(x.mat)!="matrix"){
+    return("bad input")
+  }
   #first scale x
   x.scaled.mat <- scale(x.mat)
-  total.mat <- matrix(c(rep(0, ncol(x.mat) * length(penalty.vec)),ncol(x.mat),length(penalty.vec)))
-  slope.mat <- matrix(c(rep(0, ncol(x.mat) * length(penalty.vec)),ncol(x.mat),length(penalty.vec)))
+  total.mat <- matrix(c(rep(0, ncol(x.mat) * length(penalty.vec),ncol(x.mat),length(penalty.vec))))
+  slope.mat <- matrix(c(rep(0, ncol(x.mat) * length(penalty.vec),ncol(x.mat),length(penalty.vec))))
   
   for (current.index in seq(length(penalty.vec))) {#seq is a sequence that counts up to length of penalty vector
     #need initial weight vector
@@ -57,14 +59,17 @@ LMSquareLossL2penalties <- function(x.mat, y.vec, penalty.vec) {
 # penalty.vec <-
 # LMLogisticLossL2penalties(x.mat,y.vec,penalty.vec)
 LMLogisticLossL2penalties <- function(x.mat, y.vec, penalty.vec) {
-
+  if(class(x.mat)!="matrix"){
+    return("bad input")
+  }
   #first scale x
   x.scaled.mat <- scale(x.mat)
   
-  w.mat <- matrix(0, nrow = nrow(x.mat), ncol = length(penalty.vec))
+  w.mat <- t(matrix(0, ncol = ncol(x.mat), nrow = length(penalty.vec)))
   
   for(current.index in (1:length(penalty.vec))){
-    w.mat[,current.index] <- LMLogisticLossL2(x.scaled.mat,y.vec,1, penalty.vec[current.index]) 
+    w.opt.vec = LMLogisticLossIterations(x.mat,y.vec,10)[,9]
+    w.mat[,current.index] <- LMLogisticLossL2(x.scaled.mat,y.vec,1, penalty.vec[current.index],w.opt.vec) 
     # 1 is the optimal.thresh
   }
   mean.vec <- colMeans(x.mat)

@@ -10,7 +10,7 @@ test_that("LMLogisticLossL2CV gives well formatted output", {
   fold.vec<-sample(rep(1:5,l=nrow(x.mat)))
   penalty.vec <- c(5,4,3,2,1)
   out<-LMLogisticLossL2CV(x.mat,y.vec,fold.vec,penalty.vec)
-  expect_equal(class(out),"matrix")
+  expect_equal(class(out),"list")
 })
 
 test_that("LMLogisticLossL2CV fails gracefully on bad input", {
