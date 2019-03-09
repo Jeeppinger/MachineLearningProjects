@@ -23,8 +23,7 @@ LMSquareLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec, max.iteration) {
     num.folds <- length(unique(fold.vec))
     
     validation.loss.mat <-matrix(rep(0, num.folds * max.iteration), num.folds, max.iteration)
-    train.loss.mat <-
-      matrix(rep(0, num.folds * max.iteration), num.folds, max.iteration)
+    train.loss.mat <- matrix(rep(0, num.folds * max.iteration), num.folds, max.iteration)
     
     
     #set up train and validation split
@@ -33,14 +32,14 @@ LMSquareLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec, max.iteration) {
       validation.index <- which(fold.vec == fold.index)
       
       #determine loss
-      w.mat <- LMSquareLossIterations(x.mat[train.index, ], y.vec[train.index, ], max.iteration)
+      w.mat <- LMSquareLossIterations(x.mat[train.index, ], as.matrix(y.vec[train.index, ]), max.iteration)
       
-      train.prediction <- x.mat[train.index, ] %*% w.mat
-      train.loss <- (train.prediction - y.vec[train.index, ]) ^ 2
+      train.prediction <- as.matrix(x.mat[train.index, ]) %*% as.matrix(w.mat[-1,])
+      train.loss <- (train.prediction - matrix( rep( y.vec[train.index,] , 10 ) , ncol = 10, byrow = TRUE )) ^ 2
       
       #validation loss
-      validation.prediction <- x.mat[validation.index, ] %*% w.mat
-      validation.loss <-(validation.predict - y.vec[validation.index, ]) ^ 2
+      validation.prediction <- x.mat[validation.index, ] %*% w.mat[-1,]
+      validation.loss <-(validation.prediction - y.vec[validation.index, ]) ^ 2
       
       mean.train.loss <- colMeans(train.loss)
       mean.validation.loss <- colMeans(validation.loss)
@@ -64,7 +63,7 @@ LMSquareLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec, max.iteration) {
         mean.validation.loss.vec = mean.validation.loss.vec,
         mean.train.loss.vec = mean.train.loss.vec,
         selected.steps = selected.steps,
-        w.vec = weight.vec,
+        w.vec = w.vec,
         prediction = predict
       )
     return(results.list)
@@ -147,4 +146,4 @@ LMLogisticLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec = NULL, max.iter
       )
     
     return(results.list)
-  }
+}
