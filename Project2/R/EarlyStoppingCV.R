@@ -112,13 +112,13 @@ LMLogisticLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec = NULL, max.iter
           validation.index <- which(fold.vec == fold.index)
         }
         
-        w.mat <-LMLogisticLossIterations(x.mat[train.index,], y.vec[train.index], max.iteration, step.size)
+        w.mat <-LMLogisticLossIterations(x.mat[train.index,], as.matrix(y.vec[train.index]), max.iteration, step.size)
         
-        if (validation.set == "train") {
-          train.loss.mat[fold.index, ] <-colMeans(cbind(1, x.mat)[validation.index,] %*% x.mat - y.vec[validation.index]) 
+        if (trainvalid.split == "train") {
+          #train.loss.mat[fold.index, ] <-colMeans(x.mat[validation.index,] %*% w.mat - as.matrix(y.vec[validation.index]))
           #cbind to add a column
           } else{
-          validation.loss.mat[fold.index, ] <-colMeans(cbind(x.mat)[validation.index,] %*% w.mat - y.vec[validation.index])
+          #validation.loss.mat[fold.index, ] <-colMeans(cbind(x.mat)[validation.index,] %*% w.mat - y.vec[validation.index])
           
         }
       }
@@ -141,7 +141,7 @@ LMLogisticLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec = NULL, max.iter
         mean.validation.loss = mean.validation.loss.vec,
         mean.train.loss = mean.train.loss.vec,
         selected.steps = selected.steps,
-        w.vec = weight.vec,
+        w.vec = w.vec,
         prediction = predict
       )
     
