@@ -56,25 +56,29 @@ LMSquareLossL2 <-function(x.scaled.mat, y.vec, penalty, optimal.thresh = 0.5, in
 #' y.vec<-as.matrix(data.set[,dim(data.set)[2]])
 #' penalty<-5
 #' max.iterations=10
-
-# w.vec <- LMLogisticLossIterations(x.mat,y.vec,max.iterations)[,9]
-# LMLogisticLossL2(x.mat,y.vec,penalty,initial.weight.vec=w.mat[,9])
-LMLogisticLossL2 <- function(X.scaled.mat, y.vec, penalty, optimal.thresh, initial.weight.vec){
+#'w.vec <- LMLogisticLossIterations(x.mat,y.vec,max.iterations)[,9]
+ 
+#LMLogisticLossL2(x.mat,y.vec,penalty,initial.weight.vec=w.mat[,9])
+LMLogisticLossL2 <- function(x.scaled.mat, y.vec, penalty, optimal.thresh, initial.weight.vec){
     
-    step.size <= 0.5
-    max.iterations <= 100 
+    step.size <- 0.5
+    max.iterations <- 100 
     
     optimal.weight.vec = initial.weight.vec
     
-    loss.vec <- -t(x.scaled.mat) %*% as.matrix(y.vec) / (1 + exp(y.vec * (x.scaled.mat %*% optimal.weight.vec)))
-    cost.vec <- loss.vec + penalty * optimal.weight.vec #L1 norm
+    loss.vec<- -t(x.scaled.mat) %*% as.matrix(y.vec) / as.double((as.matrix(1) + exp(as.vector(y.vec) %*% (x.scaled.mat %*% optimal.weight.vec))))
     
-    while (norm(abs(cost.vec)) > optimal.thresh){ #while the cost is out of the threshold 
-      loss.vec <- -t(x.scaled.mat) %*% as.matrix(y.vec) / (1 + exp(y.vec * (x.scaled.mat %*% optimal.weight.vec)))
+    cost.vec <- loss.vec + penalty * optimal.weight.vec #L1 norm
+    i<-1
+    while (i <10){ #while the cost is out of the threshold 
+      #-t(x.scaled.mat) %*% as.matrix(y.vec) / as.double((as.matrix(1) + exp(as.vector(y.vec) %*% (x.scaled.mat %*% w.vec))))#used to add b.temp
+      
+      loss.vec<- -t(x.scaled.mat) %*% as.matrix(y.vec) / as.double((as.matrix(1) + exp(as.vector(y.vec) %*% (x.scaled.mat %*% optimal.weight.vec))))
       cost.vec <- loss.vec + penalty * optimal.weight.vec #L1 norm
       optimal.weight.vec <- optimal.weight.vec - step.size * cost.vec #L1 norm
+      i<- i+1
     }
     
     
     return(optimal.weight.vec)
-  }
+}

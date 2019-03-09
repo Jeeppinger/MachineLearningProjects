@@ -22,7 +22,7 @@ LMSquareLossL2CV <- function(x.mat, y.vec, fold.vec, penalty.vec) {
   num.folds <- length(unique(fold.vec))
   
   validation.loss.mat <- matrix(rep(0, num.folds * length(penalty.vec)), num.folds, length(penalty.vec))
-  train.loss.mat <- matrix(rep(0, num.folds * length(penalty.vec)), n.folds, length(penalty.vec))
+  train.loss.mat <- matrix(rep(0, num.folds * length(penalty.vec)), num.folds, length(penalty.vec))
   
   #split train and validation
   for (fold.index in seq_len(num.folds)) {#a sequence counts from 1 to num.folds
