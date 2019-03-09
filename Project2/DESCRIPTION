@@ -9,8 +9,6 @@ Description: Code to show c++ code in an R package. This package is an implement
     the basic interaction between c++ code and R. 
 License: GPL-3
 ReoxygenNote: 6.1.1
-LinkingTo: RcppEigen
-Imports: data.table
 RoxygenNote: 6.1.1
 Suggests: 
     ElemStatLearn,
@@ -18,4 +16,5 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+Encoding: UTF-8
 
