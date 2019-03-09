@@ -24,7 +24,8 @@ LMSquareLossL2 <-function(x.scaled.mat, y.vec, penalty, optimal.thresh = 0.5, in
   current.weight.vec <- initial.weight.vec
     # loop until we are in the optimal threshold
     while (TRUE) {
-      grad.cost <- 2* t(x.scaled.mat) %*%(x.scaled.mat %*% current.weight.vec - as.matrix(y.vec)) + 2 * penalty * current.weight.vec
+      #grad.cost <- 2* t(x.scaled.mat) %*%(x.scaled.mat %*% as.matrix(current.weight.vec) - as.matrix(y.vec)) + 2 * penalty * current.weight.vec
+      grad.cost<- 0
       #the above formula was derived in class notes
       if (sum(abs(grad.cost)) <= optimal.thresh) {
         break#stop because we are in the threshold
