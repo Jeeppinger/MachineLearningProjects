@@ -29,12 +29,14 @@ final.mat <- matrix(1:12, nrow = 4, dimnames = list(c("Set-1","Set-2","Set-3","S
 for(test.fold in 1:n.folds){
   is.test <- fold.vec == test.fold
     is.train <- !is.test
-    x.train <- data.set$features[is.train,]
-    y.train <- data.set$labels[is.train]
+    x.train <- as.matrix(data.set$features[is.train,])
+    y.train <- as.matrix(data.set$labels[is.train])
+    sub.fold.vec<-sample(rep(1:5,l=nrow(x.train)))
     #Display the mean of the Train labels
     mean(y.train)
     x.test <- data.set$features[is.test,]
     y.test <- data.set$labels[is.test]
+    penalty.vec=c(5,4,3,2,1)
     baseline <- mean(y.train)
     fit <- linearmodels:: LMSquareLossIterations(x.train, y.train,30,1)
     pred.vec <- as.matrix(cbind(c(rep(1, dim(x.test)[1])),x.test))%*%as.matrix(fit)
@@ -42,32 +44,16 @@ for(test.fold in 1:n.folds){
     sqr.loss.vec <- (y.test - t(rowMeans(pred.vec)))^2
     plot(sqr.loss.vec)
     sqr.loss.vec
-      #for(algo in names(pred.prob.list)){
-      #pred.prob.vec <- pred.prob.list[[algo]]
-      #pred.class.vec <- ifelse(pred.prob.vec > 0.5, 1, 0)
-      #test.fold.result.list[[algo]] <- 
-      #   mean(data.set$labels[is.test] != pred.class.vec)
-      #}
-    for(algo in pred.vec){
-      early.stop.list <- linearmodels:: LMSquareLossEarlyStoppingCV(x.test,y.test,fold.vec,30,1)
-      #Gets the mean.validation.loss & mean.train.loss.vec 
-      early.stop.list[[1]]
-      #Selected steps
-      early.stop.list[[2]]
-      #weight.vec, the weight vector found by using gradient descent
-      early.stop.list[[3]]
-      #Call the predict function
-      early.stop.list[[4]](x.test)
-      
-      #Inserts into our final matrix
-        #early stopping predictor
-      final.mat[test.fold,1] = final.mat[test.fold,1] + early.stop.list[[4]](x.test)
-        #L2 regularized predictor
-      final.mat[test.fold,2] = final.mat[test.fold,2] + mean(pred.vec)
-        #baseline/un-informed predictor
-      final.mat[test.fold,3] = final.mat[test.fold,3] + baseline
-      early.stop.list
-    }
+    early.stop.list <- linearmodels:: LMSquareLossEarlyStoppingCV(x.train,y.train,sub.fold.vec,30)
+    square.loss <- linearmodels:: LMSquareLossL2(x.train, y.train, penalty.vec)
+    #Inserts into our final matrix
+      #early stopping predictor
+    final.mat[test.fold,1] = final.mat[test.fold,1] + early.stop.list$mean.validation.loss
+      #L2 regularized predictor
+    final.mat[test.fold,2] = final.mat[test.fold,2] + mean(square.loss)
+      #baseline/un-informed predictor
+    final.mat[test.fold,3] = final.mat[test.fold,3] + baseline
+    early.stop.list
 }
 final.mat
 ```
@@ -162,8 +148,6 @@ results.list <- list()
 mean.loss.list <- list()
 for(data.name in names(data.list)){
   data.set <- data.list[[data.name]]
-  str(data.set)
-  stopifnot(all(data.set$labels %in% c(0,1)))
   stopifnot(length(data.set$labels)==nrow(data.set$features))
   set.seed(1)
   fold.vec <- sample(rep(1:n.folds,l=nrow(data.set$features)))
@@ -174,11 +158,12 @@ for(data.name in names(data.list)){
     is.train <- !is.test
     X.train <- data.set$features[is.train,]
     y.train <- data.set$labels[is.train]
+    sub.fold.vec <- as.matrix(sample(rep(1:n.folds,l=nrow(x.train))))
     baseline <- mean(y.train)
     fit <- linearmodels:: LMLogisticLossIterations(X.train, y.train,30,1)
-    str(fit)
     mean.loss.list[[paste(data.name, test.fold)]]<- fit$mean.loss$mean.loss
     ##plot(fit$mean.loss$mean.loss)
+    test.fold.result.list <- list()
     pred.prob.list <- list(
       earlystopping=fit$predict(data.set$features[is.test,]),
       l2regularized=fit$predict(data.set$lebels[is.test,]),
@@ -195,8 +180,6 @@ x <- matrix(1:12, nrow = 4, dimnames = list(c("Dataset 1","Dataset 2","Dataset 3
 ```{r}
 data(spam, package="ElemStatLearn")
 data(zip.train, package = "ElemStatLearn")
-str(spam)
-str(zip.train)
 is.01 <- zip.train[,1] %in% c(0,1)
 data.list <- list(
   spam=list(
@@ -205,47 +188,42 @@ data.list <- list(
   zip.train=list(
     features=zip.train[is.01,-1],
     labels=as.integer(zip.train[is.01,1])))
-str(data.list)
 n.folds <- 5
 results.list <- list()
 mean.loss.list <- list()
+final.mat <- matrix(1:12, nrow = 4, dimnames = list(c("Dataset 1","Dataset 2","Dataset 3","Dataset 4"), c("EarlyStop","L2 Predict","Baseline")))
 for(data.name in names(data.list)){
   data.set <- data.list[[data.name]]
-  str(data.set)
   stopifnot(all(data.set$labels %in% c(0,1)))
   stopifnot(length(data.set$labels)==nrow(data.set$features))
   set.seed(1)
   fold.vec <- sample(rep(1:n.folds,l=nrow(data.set$features)))
-  str(fold.vec)
   result.mat.list <- list()
   for(test.fold in 1:n.folds){
     is.test <- fold.vec == test.fold
     is.train <- !is.test
-    x.train <- data.set$features[is.train,]
-    y.train <- data.set$labels[is.train]
+    x.train <- as.matrix(data.set$features[is.train,])
+    y.train <- as.matrix(data.set$labels[is.train])
+    sub.fold.vec <- as.matrix(sample(rep(1:n.folds,l=nrow(x.train))))
     baseline <- mean(y.train)
-    fit <- linearmodels:: LMLogisticLossIterations(x.train, y.train,30,1)
-    str(fit)
+    fit <- linearmodels:: LMLogisticLossEarlyStoppingCV(x.train, y.train,sub.fold.vec,30,1)
     mean.loss.list[[paste(data.name, test.fold)]]<- fit$mean.loss$mean.loss
     ##plot(fit$mean.loss$mean.loss)
-    pred.prob.list <- list(
-      earlystopping=....,
-      l2regularized-...,
-      ##knn = fit$predict(data.set$features[is.test,]),
-      baseline =rep(baseline, sum(is.test)))
-    str(pred.prob.list)
+    earlystopping <- linearmodels:: LMLogisticLossEarlyStoppingCV(x.train, y.train,sub.fold.vec,30,1)
+    l2regularized <- linearmodels:: LMLogisticLossL2(scale(x.train), y.train,5,4,fit$w.vec[-1])
+    baseline <- rep(baseline, sum(is.test))
     test.fold.result.list <- list()
-    for(algo in names(pred.prob.list)){
-      pred.prob.vec <- pred.prob.list[[algo]]
-      pred.class.vec <- ifelse(pred.prob.vec > 0.5, 1, 0)
-      test.fold.result.list[[algo]] <- 
-        mean(data.set$labels[is.test] != pred.class.vec)
-    }
     result.mat.list[[test.fold]] <- do.call(c, test.fold.result.list)
+        #Inserts into our final matrix
+      #early stopping predictor
+    final.mat[test.fold,1] = final.mat[test.fold,1] + earlystopping$mean.validation.loss
+      #L2 regularized predictor
+    final.mat[test.fold,2] = final.mat[test.fold,2] + l2regularized
+      #baseline/un-informed predictor
+    final.mat[test.fold,3] = final.mat[test.fold,3] + baseline
   }
-  do.call(r.bind, result.mat.list)
 }
-x <- matrix(1:12, nrow = 4, dimnames = list(c("Dataset 1","Dataset 2","Dataset 3","Dataset 4"), c("EarlyStop","L2 Predict","Baseline")))
+
 ```
 ## Analysis of spam data set
 ```{r}
