@@ -70,7 +70,9 @@ LMSquareLossIterations <-function(x.mat, y.vec, max.iterations, step.size = 0.5)
 # put ' when this works
 
 LMLogisticLossIterations <- function(x.mat, y.vec, max.iterations, step.size=.5) {
-    # TODO: add error checking
+    if(class(x.mat)!="matrix" || class(y.vec)!="matrix"){
+      return("bad input")
+    }
     
     x.scaled.mat <- scale(x.mat)
     # Initialize weight matrix (w) and beta (b)
