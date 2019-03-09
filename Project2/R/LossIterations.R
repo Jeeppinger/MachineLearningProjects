@@ -88,7 +88,7 @@ LMLogisticLossIterations <- function(x.mat, y.vec, max.iterations, step.size=.5)
       w.mat[, num.iterations] <-w.vec - as.double(step.size * w.grad.vec)
       b.vec[num.iterations] <- b.temp - step.size * b.grad
       
-      w.vec <- w.mat[, num.interations]
+      w.vec <- w.mat[, num.iterations]
       b.grad <- b.vec[num.iterations]
     }
     
