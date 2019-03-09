@@ -25,17 +25,16 @@ LMSquareLossL2penalties <- function(x.mat, y.vec, penalty.vec) {
   for (current.index in seq(length(penalty.vec))) {#seq is a sequence that counts up to length of penalty vector
     #need initial weight vector
     optimal.weight.vec <- LMSquareLossL2(x.scaled.mat,y.vec = y.vec, penalty.vec[current.index], 1, slope.mat)
-    total.mat[, current.index] <- optimal.weight.vec
+    #total.mat[, current.index] <- optimal.weight.vec
   }
   
   mean.vec <- colMeans(x.mat)
-  x.stddev.vec <- sqrt(rowSums((t(x.mat) - mean.vec) ^ 2) / nrows(x.mat))
-  x.stddev.mat <- diag(nrows(x.mat)) * (1 / x.stddev.vec)
-  
-  intercept <- -t(total.mat) %*% x.stddev.mat %*% mean.vec #m x 1
-  slope <- t(total.mat) %*% x.stddev.mat #m x f-1
-  w.mat <- rbind(t(intercept), t(slope))
-  return(w.mat)
+  x.stddev.vec <- sqrt(rowSums((t(x.mat) - mean.vec) ^ 2) / nrow(x.mat))
+  #x.stddev.mat <- diag(nrow(x.mat)) * (1 / x.stddev.vec)
+  #intercept <- -t(total.mat) %*% x.stddev.mat %*% mean.vec #m x 1
+  #slope <- t(total.mat) %*% x.stddev.mat #m x f-1
+  #w.mat <- rbind(t(intercept), t(slope))
+  return(optimal.weight.vec)
 }
 
 
