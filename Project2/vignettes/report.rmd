@@ -150,14 +150,15 @@ for(test.fold in 1:n.folds){
       x.train[row,"famhist"] = as.numeric(1)
     }
   }
+  x1.train <- x.train
   y.train <- as.matrix(data.set$labels[is.train])
   sub.fold.vec <- as.matrix(sample(rep(1:n.folds,l=nrow(x.train))))
   baseline <- mean(y.train)
-  fit <- linearmodels:: LMLogisticLossEarlyStoppingCV(x.train, y.train,sub.fold.vec,30,1)
+  fit <- linearmodels:: LMLogisticLossEarlyStoppingCV(type.convert(x.train), y.train,sub.fold.vec,30,1)
   mean.loss.list[[paste(data.name, test.fold)]]<- fit$mean.loss$mean.loss
   ##plot(fit$mean.loss$mean.loss)
-  earlystopping <- linearmodels:: LMLogisticLossEarlyStoppingCV(x.train, y.train,sub.fold.vec,30,.5)
-  l2regularized <- linearmodels:: LMLogisticLossL2(scale(x.train), y.train,5,4,fit$w.vec[-1])
+  earlystopping <- linearmodels:: LMLogisticLossEarlyStoppingCV(type.convert(x1.train), y.train,sub.fold.vec,30,.5)
+  l2regularized <- linearmodels:: LMLogisticLossL2(scale(type.convert(x.train)), y.train,5,4,fit$w.vec[-1])
   test.fold.result.list <- list()
   result.mat.list[[test.fold]] <- do.call(c, test.fold.result.list)
       #Inserts into our final matrix
@@ -219,12 +220,12 @@ for(data.name in names(data.list)){
 final.mat
 ```
 ## Analysis of spam data set
-```{r}
-result.list.$spam
-plot(spam validation error and selected regularization)
-```
+#```{r}
+#result.list.$spam
+#plot(spam validation error and selected regularization)
+#```
 ## Analysis of zip.train data set
-```{r}
-result.list.$zip.train
-plot(spam validation error and selected regularization)
-```
+#```{r}
+#result.list.$zip.train
+#plot(spam validation error and selected regularization)
+#```

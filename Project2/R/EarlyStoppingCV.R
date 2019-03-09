@@ -38,7 +38,7 @@ LMSquareLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec, max.iteration) {
       w.mat <- LMSquareLossIterations(x.mat[train.index, ], as.matrix(y.vec[train.index, ]), max.iteration)
       
       train.prediction <- as.matrix(x.mat[train.index, ]) %*% as.matrix(w.mat[-1,])
-      train.loss <- (train.prediction - matrix( rep( y.vec[train.index,] , 10 ) , ncol = 10, byrow = TRUE )) ^ 2
+      train.loss <- (train.prediction - matrix( rep( y.vec[train.index,] , ncol(train.prediction) ) , ncol = ncol(train.prediction), byrow = TRUE )) ^ 2
       
       #validation loss
       validation.prediction <- x.mat[validation.index, ] %*% w.mat[-1,]
