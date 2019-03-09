@@ -66,10 +66,10 @@ LMSquareLossIterations <-function(x.mat, y.vec, max.iterations, step.size = 0.5)
 #' y.vec<-as.matrix(data.set[,dim(data.set)[2]])
 #' max.iterations=10
 
-# LMLogisticLossIterations(x.mat,y.vec,max.iterations)
+#' LMLogisticLossIterations(x.mat,y.vec,max.iterations)
 # put ' when this works
 
-LMLogisticLossIterations <- function(x.mat, y.vec, max.iterations, step.size) {
+LMLogisticLossIterations <- function(x.mat, y.vec, max.iterations, step.size=.5) {
     # TODO: add error checking
     
     x.scaled.mat <- scale(x.mat)
@@ -79,26 +79,26 @@ LMLogisticLossIterations <- function(x.mat, y.vec, max.iterations, step.size) {
     b.vec <- rep(0,l = max.iterations)
     b.temp <- 0 
     # loop through all iterations
-    for (num.interations in (1:max.iterations)) {
+    for (num.iterations in (1:max.iterations)) {
       #these come from the notes in class
       w.grad.vec <- -t(x.scaled.mat) %*% as.matrix(y.vec) / as.double((as.matrix(1) + exp(as.vector(y.vec) %*% (x.scaled.mat %*% w.vec))))#used to add b.temp
       
       b.grad <- - sum(y.vec) / (as.matrix(1) + exp(as.vector(y.vec) %*% (x.scaled.mat %*% w.vec)))#used to add b.temp
       w.grad.vec<-b.grad
-      w.mat[,num.iterations] <-w.vec - step.size * w.grad.vec
+      w.mat[, num.iterations] <-w.vec - as.double(step.size * w.grad.vec)
       b.vec[num.iterations] <- b.temp - step.size * b.grad
       
-      w.vec <- w.mat[,num.interations]
+      w.vec <- w.mat[, num.interations]
       b.grad <- b.vec[num.iterations]
     }
     
     # need to convert back to scaled data
     x.mean.vec <- colMeans(x.mat)
     #TODO: look into a function to make standard dev easier
-    x.stddev.vec <-sqrt(rowSums((t(x.mat) - x.mean.vec)^2) / nrows(x.mat))
+    x.stddev.vec <-sqrt(rowSums((t(x.mat) - x.mean.vec)^2) / nrow(x.mat))
     
-    temp.vec <- -t(x.mean.vec) %*% x.stddev.mat %*% w.mat
-    w.mat <- rbind(temp.vec, x.stddev.mat %*% w.mat)
+    temp.vec <- as.double(-t(as.matrix(x.mean.vec)) %*% as.matrix(x.stddev.vec)) * w.mat
+    w.mat <- cbind(temp.vec, as.matrix(w.mat))
     
     return(w.mat)
     
