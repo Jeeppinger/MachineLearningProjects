@@ -108,11 +108,11 @@ LMLogisticLossL2CV <- function(x.mat, y.vec, fold.vec, penalty.vec) {
         validation.index <- which(fold.vec == fold.index)
       }
       
-      w.mat <- LMLogisticLossL2penalties(x.mat[train.index,], y.vec[train.index], penalty.vec) 
+      w.mat <- LMLogisticLossIterations(x.mat[train.index,], y.vec[train.index], penalty.vec) 
       if (trainvalid.split == "train") {
-        train.loss.mat[fold.index, ] <-colMeans(x.mat[validation.index,] %*% w.mat - y.vec[validation.index])
+        #train.loss.mat[fold.index, ] <-colMeans(x.mat[validation.index,] %*% w.mat - y.vec[validation.index])
       } else{#validation
-        validation.loss.mat[fold.index, ] <-colMeans(x.mat[validation.index,] %*% w.mat - y.vec[validation.index])
+        #validation.loss.mat[fold.index, ] <-colMeans(x.mat[validation.index,] %*% w.mat - y.vec[validation.index])
       }
     }
   }
@@ -120,18 +120,18 @@ LMLogisticLossL2CV <- function(x.mat, y.vec, fold.vec, penalty.vec) {
   mean.validation.loss <- colMeans(validation.loss.mat)
   current.penalty <- which.min(mean.validation.loss)
   
-  w.vec <-LMLogisticLossL2penalties(x.mat, y.vec, penalty.vec)[, current.penalty]
+  w.vec <-LMLogisticLossIterations(x.mat, y.vec, penalty.vec)[, current.penalty]
   
   prediction <- function(test.mat) {
     prediction.vec <- test %*% t(w.vec)
   }
   
   result.list <- list(
-    mean.validation.loss = mean.validation.loss.vec,
-    mean.train.loss = mean.train.loss.vec,
-    current.penalty = penalty.vec,
+    mean.validation.loss = mean.validation.loss,
+    mean.train.loss = mean.train.loss,
+    current.penalty = current.penalty,
     selected.penalty = penalty.vec[current.penalty],
-    w.vec = weight.vec,
+    w.vec = w.vec,
     prediction = predict
   )
   

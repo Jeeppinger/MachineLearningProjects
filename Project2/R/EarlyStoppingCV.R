@@ -16,8 +16,8 @@
 #' y.vec<-as.matrix(data.set[,dim(data.set)[2]])
 #' max.iteration=10
 #' fold.vec<-sample(rep(1:5,l=nrow(x.mat)))
+#' LMSquareLossEarlyStoppingCV(x.mat,y.vec,fold.vec,max.iteration)
 
-# LMSquareLossIterations(x.mat,y.vec,fold.vec,max.iteration)
 LMSquareLossEarlyStoppingCV <-function(x.mat, y.vec, fold.vec, max.iteration) {
     # Find the num of K-fold
     num.folds <- length(unique(fold.vec))
