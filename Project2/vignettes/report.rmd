@@ -45,10 +45,10 @@ for(test.fold in 1:n.folds){
     plot(sqr.loss.vec)
     sqr.loss.vec
     early.stop.list <- linearmodels:: LMSquareLossEarlyStoppingCV(x.train,y.train,sub.fold.vec,30)
-    square.loss <- linearmodels:: LMSquareLossL2(x.train, y.train, penalty.vec)
+    square.loss <- linearmodels:: LMSquareLossL2(x.train, y.train, penalty.vec,1,fit)
     #Inserts into our final matrix
       #early stopping predictor
-    final.mat[test.fold,1] = final.mat[test.fold,1] + early.stop.list$mean.validation.loss
+    final.mat[test.fold,1] = final.mat[test.fold,1] + mean(early.stop.list$mean.validation.loss)
       #L2 regularized predictor
     final.mat[test.fold,2] = final.mat[test.fold,2] + mean(square.loss)
       #baseline/un-informed predictor
@@ -188,10 +188,10 @@ data.list <- list(
   zip.train=list(
     features=zip.train[is.01,-1],
     labels=as.integer(zip.train[is.01,1])))
-n.folds <- 5
+n.folds <- 4
 results.list <- list()
 mean.loss.list <- list()
-final.mat <- matrix(1:12, nrow = 4, dimnames = list(c("Dataset 1","Dataset 2","Dataset 3","Dataset 4"), c("EarlyStop","L2 Predict","Baseline")))
+final.mat <- matrix(1:12, nrow = n.folds, dimnames = list(c("Set-1","Set-2","Set-3","Set-4"), c("Early-Stop","L2-Predict","Baseline")))
 for(data.name in names(data.list)){
   data.set <- data.list[[data.name]]
   stopifnot(all(data.set$labels %in% c(0,1)))
@@ -211,19 +211,18 @@ for(data.name in names(data.list)){
     ##plot(fit$mean.loss$mean.loss)
     earlystopping <- linearmodels:: LMLogisticLossEarlyStoppingCV(x.train, y.train,sub.fold.vec,30,1)
     l2regularized <- linearmodels:: LMLogisticLossL2(scale(x.train), y.train,5,4,fit$w.vec[-1])
-    baseline <- rep(baseline, sum(is.test))
     test.fold.result.list <- list()
     result.mat.list[[test.fold]] <- do.call(c, test.fold.result.list)
         #Inserts into our final matrix
       #early stopping predictor
-    final.mat[test.fold,1] = final.mat[test.fold,1] + earlystopping$mean.validation.loss
+    final.mat[test.fold,1] = final.mat[test.fold,1] + mean(earlystopping$mean.validation.loss)
       #L2 regularized predictor
-    final.mat[test.fold,2] = final.mat[test.fold,2] + l2regularized
+    final.mat[test.fold,2] = final.mat[test.fold,2] + mean(l2regularized)
       #baseline/un-informed predictor
     final.mat[test.fold,3] = final.mat[test.fold,3] + baseline
   }
 }
-
+final.mat
 ```
 ## Analysis of spam data set
 ```{r}
