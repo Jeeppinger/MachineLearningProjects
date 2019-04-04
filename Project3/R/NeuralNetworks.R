@@ -39,6 +39,8 @@ NNetIterations <- function(x.mat, y.vec, max.iterations, step.size, n.hidden.uni
   V<- V - step.size * grad.v
   cost<- sum(abs(c(grad.w, as.numeric(grad.v)))) #find the minimum cost for L1
   
+  #need to return our list of things
+  
   
 }
 
