@@ -13,11 +13,11 @@
 #'
 #' @examples
 NNetIterations <- function(x.mat, y.vec, max.iterations, step.size, n.hidden.units, is.train) {
-#see the demoProject3.R file for a starting point
+#see the demoProject3.R file for a starting point on the NNet algorithm
+  
   #first we should split the data into training and validation data
   #split the data on the is.train vector of booleans  
   for (index in (1:length(is.train))) {
-    #if is.train[index] == true
     if(is.train[index]){
       x.train <- cbind(x.train, x.mat[index,])
       y.train <-cbind(y.train, y.vec[index])
