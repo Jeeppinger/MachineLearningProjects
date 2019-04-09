@@ -14,7 +14,7 @@
 #' @examples
 NNetIterations <- function(x.mat, y.vec, max.iterations, step.size, n.hidden.units, is.train) {
 #see the demoProject3.R file for a starting point on the NNet algorithm
-  
+  is.binary <- TRUE
   #first we should split the data into training and validation data
   #split the data on the is.train vector of booleans  
   for (index in (1:length(is.train))) {
@@ -25,9 +25,11 @@ NNetIterations <- function(x.mat, y.vec, max.iterations, step.size, n.hidden.uni
       x.valid <- cbind(x.valid, x.mat[index,])
       y.valid <-cbind(y.valid, y.vec[index])
     }
+    if (y.vec[index] != 1 && y.vec[index]!=0){
+     is.binary <- FALSE 
+    }
   }
     
-  
   #then scale the train data here
   x.scaled.mat <- scale(x.train)
   V<- matrix(rnorm(ncol(x.scaled.mat)*n.hidden.units), ncol(x.scaled.mat), n.hidden.units)
@@ -39,8 +41,12 @@ NNetIterations <- function(x.mat, y.vec, max.iterations, step.size, n.hidden.uni
   w <- rnorm(n.hidden.units)
   b <- as.numeric(Z %*% w)
   
-  #this delta w is different for binary classification
-  delta.w <- b - y.vec
+  #decide which delta.w based on if we are binary
+  if(is.binary){
+    delta.w <- -y.train %*% sigmoid(-y.train%*%b)
+  }else{
+    delta.w <- b - y.train
+  }
   
   sigmoid.prime <- Z * (1-Z) 
   delta.v <- diag(delta.w) %*% sigmoid.prime %*% diag(w)
