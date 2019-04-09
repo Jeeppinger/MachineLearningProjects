@@ -13,10 +13,23 @@
 #'
 #' @examples
 NNetIterations <- function(x.mat, y.vec, max.iterations, step.size, n.hidden.units, is.train) {
-#see the demoProjectR3 for a staring point
+#see the demoProject3.R file for a starting point
   #first we should split the data into training and validation data
-  #the scale the train data here
-  x.scaled.mat <- scale(x.mat)
+  #split the data on the is.train vector of booleans  
+  for (index in (1:length(is.train))) {
+    #if is.train[index] == true
+    if(is.train[index]){
+      x.train <- cbind(x.train, x.mat[index,])
+      y.train <-cbind(y.train, y.vec[index])
+    }else{
+      x.valid <- cbind(x.valid, x.mat[index,])
+      y.valid <-cbind(y.valid, y.vec[index])
+    }
+  }
+    
+  
+  #then scale the train data here
+  x.scaled.mat <- scale(x.train)
   V<- matrix(rnorm(ncol(x.scaled.mat)*n.hidden.units), ncol(x.scaled.mat), n.hidden.units)
   A <- x.scaled.mat %*% V
   sigmoid <- function(a){
@@ -33,14 +46,20 @@ NNetIterations <- function(x.mat, y.vec, max.iterations, step.size, n.hidden.uni
   delta.v <- diag(delta.w) %*% sigmoid.prime %*% diag(w)
   grad.w <- t(Z) %*% delta.w / nrow(x.scaled.mat)
   grad.v<- t(x.scaled.mat) %*% delta.v / nrow(x.scaled.mat) 
+  
   #need to loop through this max iteraitons number of times 
+  for (index in (1:max.iterations)) {
   #now take a step
   w<- w - step.size * grad.w
   V<- V - step.size * grad.v
   cost<- sum(abs(c(grad.w, as.numeric(grad.v)))) #find the minimum cost for L1
-  
+  #optimize square loss
+  #append w and V to w.vec and V.mat
+  }
   #need to return our list of things
-  
+  #pred.mat should be n x max.iteration
+  #v.mat n+1 x hidden units
+  #w.vec hidden units +1
   
 }
 
