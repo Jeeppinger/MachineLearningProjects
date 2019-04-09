@@ -1,0 +1,260 @@
+---
+title: ""
+author: "Allen, Joe, Madi"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Report for project 1 on nearest neighbors}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+<a id="top"></a>
+<h1>Linear Models</h1>
+### Joe Eppinger, Madison Boman, and Allen Clarke
+#### NAU March 8, 2019
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+<h3>LMSquareLoss Prostate Dataset Analysis</h3>
+<p>This is calculating the L2-Prediction, Baseline, and Early stop on the LMSquareLossIterations function we have coded. The data set being used is Prostate</p>
+```{r,fig.width = 6}
+data <- data(prostate, package="ElemStatLearn")
+data.set <- prostate[, -dim(prostate)[2]]
+data.set$labels <- data.set[, dim(data.set)[2]]
+data.set$features <- data.set[,-dim(data.set)[2]]
+max.iterations <- 10
+n.folds <- 4
+fold.vec <- sample(rep(1:n.folds,l=nrow(data.set$features)))
+final.mat <- matrix(1:12, nrow = 4, dimnames = list(c("Set-1","Set-2","Set-3","Set-4"), c("Early-Stop","L2-Predict","Baseline")))
+#starts at 1
+for(test.fold in 1:n.folds){
+  is.test <- fold.vec == test.fold
+    is.train <- !is.test
+    x.train <- as.matrix(data.set$features[is.train,])
+    y.train <- as.matrix(data.set$labels[is.train])
+    sub.fold.vec<-sample(rep(1:5,l=nrow(x.train)))
+    #Display the mean of the Train labels
+    mean(y.train)
+    x.test <- data.set$features[is.test,]
+    y.test <- data.set$labels[is.test]
+    penalty.vec=c(5,4,3,2,1)
+    baseline <- mean(y.train)
+    fit <- linearmodels:: LMSquareLossIterations(x.train, y.train,30,1)
+    pred.vec <- as.matrix(cbind(c(rep(1, dim(x.test)[1])),x.test))%*%as.matrix(fit)
+    sqr.loss.vec <- (y.test - t(rowMeans(pred.vec)))^2
+    plot(sqr.loss.vec)
+    sqr.loss.vec
+    early.stop.list <- linearmodels:: LMSquareLossEarlyStoppingCV(x.train,y.train,sub.fold.vec,30)
+    square.loss <- linearmodels:: LMSquareLossL2(x.train, y.train, penalty.vec,1,fit)
+    #Inserts into our final matrix
+      #early stopping predictor
+    final.mat[test.fold,1] = mean(early.stop.list$mean.validation.loss)
+      #L2 regularized predictor
+    final.mat[test.fold,2] = mean(square.loss)
+      #baseline/un-informed predictor
+    final.mat[test.fold,3] = baseline
+    early.stop.list
+}
+library(gridExtra)
+library(grid)
+d <- head(final.mat)
+grid.table(d)
+```
+<h4>Analysis of Prostate Data Set</h4>
+<p>By observing this dataset we can conclude that the L2 is more accurate than the Early-Stopping. Baseline has more accuracy compared to the other two since all the starting numbers are 2 for it. Whereas Early-stop is very sparatic</p>
+
+<h3>LMSquareLoss Ozone Dataset Analysis</h3>
+<p>This is calculating the L2-Prediction, Baseline, and Early stop on the LMSquareLossIterations function we have coded. The data set being used is Ozone</p>
+```{r,fig.width = 6}
+data <- data(ozone, package="ElemStatLearn")
+data.set <- ozone[, -dim(ozone)[2]]
+data.set$labels <- data.set[, dim(data.set)[2]]
+data.set$features <- data.set[,-dim(data.set)[2]]
+max.iterations <- 10
+n.folds <- 4
+fold.vec <- sample(rep(1:n.folds,l=nrow(data.set$features)))
+final.mat <- matrix(1:12, nrow = 4, dimnames = list(c("Set-1","Set-2","Set-3","Set-4"), c("Early-Stop","L2-Predict","Baseline")))
+#starts at 1
+for(test.fold in 1:n.folds){
+  is.test <- fold.vec == test.fold
+    is.train <- !is.test
+    x.train <- as.matrix(data.set$features[is.train,])
+    y.train <- as.matrix(data.set$labels[is.train])
+    sub.fold.vec<-sample(rep(1:5,l=nrow(x.train)))
+    #Display the mean of the Train labels
+    mean(y.train)
+    x.test <- data.set$features[is.test,]
+    y.test <- data.set$labels[is.test]
+    penalty.vec=c(5,4,3,2,1)
+    baseline <- mean(y.train)
+    fit <- linearmodels:: LMSquareLossIterations(x.train, y.train,30,1)
+    pred.vec <- as.matrix(cbind(c(rep(1, dim(x.test)[1])),x.test))%*%as.matrix(fit)
+    sqr.loss.vec <- (y.test - t(rowMeans(pred.vec)))^2
+    plot(sqr.loss.vec)
+    sqr.loss.vec
+    early.stop.list <- linearmodels:: LMSquareLossEarlyStoppingCV(x.train,y.train,sub.fold.vec,30)
+    square.loss <- linearmodels:: LMSquareLossL2(x.train, y.train, penalty.vec,1,fit)
+    #Inserts into our final matrix
+      #early stopping predictor
+    final.mat[test.fold,1] = mean(early.stop.list$mean.validation.loss)
+      #L2 regularized predictor
+    final.mat[test.fold,2] = mean(square.loss)
+      #baseline/un-informed predictor
+    final.mat[test.fold,3] = baseline
+    early.stop.list
+}
+library(gridExtra)
+library(grid)
+d <- head(final.mat)
+grid.table(d)
+```
+<h4>Analysis of Ozone Data Set</h4>
+<p>By observing this dataset we can conclude that the Early-stopping is more accurate than the L2 because L2 is a negative number. I would say they all are equally accurate in their data</p>
+
+
+<h3>LMLogisticLossIterations Spam</h3>
+<p>This is calculating the L2-Prediction, Baseline, and Early stop on the LMLogisticLossIterations function we have coded. The data set being used is Spam</p>
+```{r,fig.width = 6}
+data(spam, package="ElemStatLearn")
+data.set <- spam[, -dim(spam)[2]]
+data.set$labels <- data.set[, dim(data.set)[2]]
+data.set$features <- data.set[,-dim(data.set)[2]]
+  set.seed(1)
+  fold.vec <- sample(rep(1:n.folds,l=nrow(data.set$features)))
+  result.mat.list <- list()
+  for(test.fold in 1:n.folds){
+    is.test <- fold.vec == test.fold
+    is.train <- !is.test
+    x.train <- as.matrix(data.set$features[is.train,])
+    y.train <- as.matrix(data.set$labels[is.train])
+    sub.fold.vec <- as.matrix(sample(rep(1:n.folds,l=nrow(x.train))))
+    baseline <- mean(y.train)
+    fit <- linearmodels:: LMLogisticLossEarlyStoppingCV(x.train, y.train,sub.fold.vec,30,1)
+    ##plot(fit$mean.loss$mean.loss)
+    earlystopping <- linearmodels:: LMLogisticLossEarlyStoppingCV(x.train, y.train,sub.fold.vec,30,1)
+    l2regularized <- linearmodels:: LMLogisticLossL2(scale(x.train), y.train,5,4,fit$w.vec[-1])
+    test.fold.result.list <- list()
+    result.mat.list[[test.fold]] <- do.call(c, test.fold.result.list)
+        #Inserts into our final matrix
+      #early stopping predictor
+    final.mat[test.fold,1] = mean(earlystopping$mean.validation.loss)
+      #L2 regularized predictor
+    final.mat[test.fold,2] = mean(l2regularized)
+      #baseline/un-informed predictor
+    final.mat[test.fold,3] = baseline
+  }
+library(gridExtra)
+library(grid)
+d <- head(final.mat)
+grid.table(d)
+```
+<h4>Analysis of Spam Data Set</h4>
+<p>By observing this dataset we can conclude that the L2 is more accurate than the Early-Stopping. Baseline has more accuracy compared to the other two since its a double and, L2 is just a fairly large number.</p>
+
+
+<h3>LMLogisticLossIterations SAheart</h3>
+<p>This is calculating the L2-Prediction, Baseline, and Early stop on the LMLogisticLossIterations function we have coded. The data set being used is SAheart</p>
+```{r,fig.width = 6}
+data(SAheart, package="ElemStatLearn")
+data.set <- SAheart[, -dim(SAheart)[2]]
+data.set$labels <- data.set[, dim(data.set)[2]]
+data.set$features <- data.set[,-dim(data.set)[2]]
+set.seed(1)
+fold.vec <- sample(rep(1:n.folds,l=nrow(data.set$features)))
+result.mat.list <- list()
+for(test.fold in 1:n.folds){
+  is.test <- fold.vec == test.fold
+  is.train <- !is.test
+  x.train <- as.matrix(data.set$features[is.train,])
+  for(row in 1:nrow(x.train)){
+    if(x.train[row,5] == "Absent"){
+      x.train[row,"famhist"] = as.numeric(0)
+    } else{
+      x.train[row,"famhist"] = as.numeric(1)
+    }
+  }
+  x1.train <- x.train
+  y.train <- as.matrix(data.set$labels[is.train])
+  sub.fold.vec <- as.matrix(sample(rep(1:n.folds,l=nrow(x.train))))
+  baseline <- mean(y.train)
+  fit <- linearmodels:: LMLogisticLossEarlyStoppingCV(type.convert(x.train), y.train,sub.fold.vec,30,1)
+  ##plot(fit$mean.loss$mean.loss)
+  earlystopping <- linearmodels:: LMLogisticLossEarlyStoppingCV(type.convert(x1.train), y.train,sub.fold.vec,30,.5)
+  l2regularized <- linearmodels:: LMLogisticLossL2(scale(type.convert(x.train)), y.train,5,4,fit$w.vec[-1])
+  test.fold.result.list <- list()
+  result.mat.list[[test.fold]] <- do.call(c, test.fold.result.list)
+      #Inserts into our final matrix
+    #early stopping predictor
+  final.mat[test.fold,1] = mean(earlystopping$mean.validation.loss)
+    #L2 regularized predictor
+  final.mat[test.fold,2] = mean(l2regularized)
+    #baseline/un-informed predictor
+  final.mat[test.fold,3] = baseline
+  }
+library(gridExtra)
+library(grid)
+d <- head(final.mat)
+grid.table(d)
+```
+<h4>Analysis of SAheart Data Set</h4>
+<p>By observing this dataset we can conclude that the L2 is more accurate than the Early-Stopping. Baseline has more accuracy compared to the other two since its a double</p>
+
+
+<h3>LMLogisticLossIterations zip.train</h3>
+<p>This is calculating the L2-Prediction, Baseline, and Early stop on the LMLogisticLossIterations function we have coded. The data set being used is zip.train</p>
+```{r,fig.width = 6}
+data(spam, package="ElemStatLearn")
+data(zip.train, package = "ElemStatLearn")
+is.01 <- zip.train[,1] %in% c(0,1)
+data.list <- list(
+  spam=list(
+    features=as.matrix(spam[,1:57]),
+    labels=ifelse(spam$spam=="spam",1,0)),
+  zip.train=list(
+    features=zip.train[is.01,-1],
+    labels=as.integer(zip.train[is.01,1])))
+n.folds <- 4
+results.list <- list()
+mean.loss.list <- list()
+final.mat <- matrix(1:12, nrow = n.folds, dimnames = list(c("Set-1","Set-2","Set-3","Set-4"), c("Early-Stop","L2-Predict","Baseline")))
+for(data.name in names(data.list)){
+  data.set <- data.list[[data.name]]
+  stopifnot(all(data.set$labels %in% c(0,1)))
+  stopifnot(length(data.set$labels)==nrow(data.set$features))
+  set.seed(1)
+  fold.vec <- sample(rep(1:n.folds,l=nrow(data.set$features)))
+  result.mat.list <- list()
+  for(test.fold in 1:n.folds){
+    is.test <- fold.vec == test.fold
+    is.train <- !is.test
+    x.train <- as.matrix(data.set$features[is.train,])
+    y.train <- as.matrix(data.set$labels[is.train])
+    sub.fold.vec <- as.matrix(sample(rep(1:n.folds,l=nrow(x.train))))
+    baseline <- mean(y.train)
+    fit <- linearmodels:: LMLogisticLossEarlyStoppingCV(x.train, y.train,sub.fold.vec,30,1)
+    mean.loss.list[[paste(data.name, test.fold)]]<- fit$mean.loss$mean.loss
+    ##plot(fit$mean.loss$mean.loss)
+    earlystopping <- linearmodels:: LMLogisticLossEarlyStoppingCV(type.convert(x.train), y.train,sub.fold.vec,30,1)
+    l2regularized <- linearmodels:: LMLogisticLossL2(scale(x.train), y.train,5,4,fit$w.vec[-1])
+    test.fold.result.list <- list()
+    result.mat.list[[test.fold]] <- do.call(c, test.fold.result.list)
+        #Inserts into our final matrix
+      #early stopping predictor
+    final.mat[test.fold,1] = mean(earlystopping$mean.validation.loss)
+      #L2 regularized predictor
+    final.mat[test.fold,2] = mean(l2regularized)
+      #baseline/un-informed predictor
+    final.mat[test.fold,3] = baseline
+  }
+}
+library(gridExtra)
+library(grid)
+d <- head(final.mat)
+grid.table(d)
+```
+<h4>Analysis of zip.train Data Set</h4>
+<p>By observing this dataset we can conclude that the L2 and Early-Stopping are about the same since neither of which provide accurate data. Baseline has more accuracy compared to the other two since its a double and, because it has real data</p>
