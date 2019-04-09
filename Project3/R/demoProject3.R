@@ -10,7 +10,7 @@ sigmoid <- function(a){
   1/(1+exp(-a))
 }
 Z <- sigmoid(A)
-w <- rnorm(num.hidden.units)
+w <- rnorm(n.hidden.units)
 b <- as.numeric(Z %*% w)
 delta.w <- b - y.vec
 sigmoid.prime <- Z * (1-Z) 
