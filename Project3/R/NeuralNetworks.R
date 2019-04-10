@@ -91,20 +91,3 @@ NNetIterations <- function(x.mat, y.vec, max.iterations, step.size, n.hidden.uni
 }
 
 
-#' @param x.mat matrix of size [n x p]
-#' @param y.vec vector of size n
-#' @param fold.vec vector of size n containing folds
-#' @param max.iterations integer > 1
-#' @param step.size integer > 1
-#' @param n.hidden.units nunmber of hidden units >= 1
-#' 
-#' @return results.list a list with pred.mat, v.mat, w.vec, predict function that takes (testx.mat), mean.validaiton.loss.vec, selected.steps
-#'
-#' @export
-#'
-#' @examples
-
-NNetEarlyStoppingCV <- function(x.mat, y.vec, fold.vec=sample(rep(1:n.folds),length(y.vec)), 
-                                          max.iterations, step.size, n.hidden.units, n.folds = 4) {
-  
-}
