@@ -23,7 +23,7 @@ NNetIterations <- function(x.mat, y.vec, max.iterations, step.size, n.hidden.uni
   x.valid<- x.mat[!is.train,]
   y.train<- y.vec[is.train]
   y.valid <- y.vec[!is.train]
-  
+  pred.mat <- matrix(0, nrow(x.train), max.iterations)
   #then scale the train data here
   x.scaled.mat <- scale(x.train)
   V<- matrix(rnorm(ncol(x.scaled.mat)*n.hidden.units), ncol(x.scaled.mat), n.hidden.units)
@@ -36,32 +36,55 @@ NNetIterations <- function(x.mat, y.vec, max.iterations, step.size, n.hidden.uni
   b <- as.numeric(Z %*% w)
   
   #decide which delta.w based on if we are binary
-  if(is.binary){
-    delta.w <- -y.train %*% sigmoid(-y.train%*%b)
-  }else{
-    delta.w <- b - y.train
-  }
-  
+ 
   sigmoid.prime <- Z * (1-Z) 
-  delta.v <- diag(delta.w) %*% sigmoid.prime %*% diag(w)
-  grad.w <- t(Z) %*% delta.w / nrow(x.scaled.mat)
-  grad.v<- t(x.scaled.mat) %*% delta.v / nrow(x.scaled.mat) 
+  
+  intercept <- rep(0, nrow(x.train))
   #descale v.mat and w.vec here
   #need to loop through this max iteraitons number of times 
   for (index in (1:max.iterations)) {
+    #(re)compute our gradient/deltas
+    delta.v <- diag(delta.w) %*% sigmoid.prime %*% diag(w)
+    grad.w <- t(Z) %*% delta.w / nrow(x.scaled.mat)
+    grad.v<- t(x.scaled.mat) %*% delta.v / nrow(x.scaled.mat) 
+   
+    #cost<- sum(abs(c(grad.w, as.numeric(grad.v)))) #find the minimum cost for L1
+    
+    #calculate intercept
+    intercept <- intercept - step.size * delta.w
+    b <- Z %*% w + intercept # n x 1
+    
+    #fill out prediction matrix
+    if(is.binary){
+      delta.w <- -y.train %*% sigmoid(-y.train%*%b)
+      pred.mat[,index] <-  ifelse(sigmoid(b)>0.5, 1, 0)
+    }else{
+      delta.w <- b - y.train
+      pred.mat[,index] <- b
+    }
+  
     #now take a step
     w<- w - step.size * grad.w
     V<- V - step.size * grad.v
-    cost<- sum(abs(c(grad.w, as.numeric(grad.v)))) #find the minimum cost for L1
-    #optimize square loss
-    #append w and V to w.vec and V.mat
-  }
+    }
+  
   V.unscaled<-V/attr(x.scaled.mat, "scaled:scale")
   b.unscaled<- -t(V/attr(x.scaled.mat, "scaled:scale")) %*% attr(x.scaled.mat, "scaled:center")
+  w.vec <- c(intercept, w)
   #need to return our list of things
   #pred.mat should be n x max.iteration
   #v.mat n+1 x hidden units
   #w.vec hidden units +1
+  result.list <- list(
+    pred.mat = pred.mat,
+    V.mat = V.unscaled,
+    w.vec = w,
+    predict = function(testX.mat) {
+      prediction.vec <- sigmoid(cbind(1, x.train) %*% V) %*% w
+      return(prediction.vec)
+    }
+  )
+  return(result.list)
   
 }
 
