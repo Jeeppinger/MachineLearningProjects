@@ -43,8 +43,17 @@ NNetIterations <- function(x.mat, y.vec, max.iterations, step.size, n.hidden.uni
   #descale v.mat and w.vec here
   #need to loop through this max iteraitons number of times 
   for (index in (1:max.iterations)) {
-    #(re)compute our gradient/deltas
-    delta.v <- diag(delta.w) %*% sigmoid.prime %*% diag(w)
+    #fill out prediction matrix
+    if(is.binary){
+      delta.w <- -y.train %*% sigmoid(-y.train%*%b)
+      pred.mat[,index] <-  ifelse(sigmoid(b)>0.5, 1, 0)
+    }else{
+      delta.w <- b - y.train
+      pred.mat[,index] <- b
+    }
+    
+     #(re)compute our gradient/deltas
+    delta.v <- diag(as.vector(delta.w)) %*% sigmoid.prime %*% diag(as.vector(w))
     grad.w <- t(Z) %*% delta.w / nrow(x.scaled.mat)
     grad.v<- t(x.scaled.mat) %*% delta.v / nrow(x.scaled.mat) 
    
@@ -54,14 +63,7 @@ NNetIterations <- function(x.mat, y.vec, max.iterations, step.size, n.hidden.uni
     intercept <- intercept - step.size * delta.w
     b <- Z %*% w + intercept # n x 1
     
-    #fill out prediction matrix
-    if(is.binary){
-      delta.w <- -y.train %*% sigmoid(-y.train%*%b)
-      pred.mat[,index] <-  ifelse(sigmoid(b)>0.5, 1, 0)
-    }else{
-      delta.w <- b - y.train
-      pred.mat[,index] <- b
-    }
+    
   
     #now take a step
     w<- w - step.size * grad.w
