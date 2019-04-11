@@ -20,6 +20,9 @@ NNetIterations <- function(x.mat, y.vec, max.iterations, step.size, n.hidden.uni
   #first we should split the data into training and validation data
   #split the data on the is.train vector of booleans  
   x.train<- x.mat[is.train,]
+  (x.train)
+  (x.mat)
+  
   x.valid<- x.mat[!is.train,]
   y.train<- y.vec[is.train]
   y.valid <- y.vec[!is.train]
