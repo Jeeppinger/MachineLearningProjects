@@ -1,16 +1,16 @@
 data(ozone, package="ElemStatLearn")
 head(ozone)
-x.unscaled.mat <- as.matrix(ozone[,-1])
-x.scaled.mat <-scale(x.unscaled.mat)
+x.mat <- as.matrix(ozone[,-1])
+x.scaled.mat <-scale(x.mat)
 y.vec <- ozone[,1]
-num.hidden.units <- 2
-V<- matrix(rnorm(ncol(x.scaled.mat)*num.hidden.units), ncol(x.scaled.mat), num.hidden.units)
+n.hidden.units <- 2
+V<- matrix(rnorm(ncol(x.scaled.mat)*n.hidden.units), ncol(x.scaled.mat), n.hidden.units)
 A <- x.scaled.mat %*% V
 sigmoid <- function(a){
   1/(1+exp(-a))
 }
 Z <- sigmoid(A)
-w <- rnorm(num.hidden.units)
+w <- rnorm(n.hidden.units)
 b <- as.numeric(Z %*% w)
 delta.w <- b - y.vec
 sigmoid.prime <- Z * (1-Z) 
