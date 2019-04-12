@@ -1,3 +1,4 @@
+#' @title neural network cross validation
 #' @param x.mat matrix of size [n x p]
 #' @param y.vec vector of size n
 #' @param fold.vec vector of size n containing folds
@@ -15,12 +16,12 @@
 #' head(ozone)
 #' x.mat <- as.matrix(ozone[,-1])
 #' y.vec <- ozone[,1]
-#' n.hidden.units <- 2
+#' n.hidden.units <- 4
 #' n.folds <- 4
 #' fold.vec <- sample(rep(1:n.folds), length(y.vec),TRUE)
 #' step.size <- .5
-#' max.iterations <-3
-#' NNetEarlyStoppingCV(x.mat=x.mat,y.vec=y.vec,fold.vec=fold.vec,max.iterations=max.iterations,step.size=step.size,n.hidden.units=n.hidden.units,n.fold=n.folds)
+#' max.iterations <-200
+#' neuralnetwork::NNetEarlyStoppingCV(x.mat=x.mat,y.vec=y.vec,fold.vec=fold.vec,max.iterations=max.iterations,step.size=step.size,n.hidden.units=n.hidden.units,n.fold=n.folds)
 
 NNetEarlyStoppingCV <-
   function(x.mat, y.vec, fold.vec = sample(rep(1:n.folds), length(y.vec),TRUE), max.iterations, step.size, n.hidden.units, n.folds = 4) {
@@ -52,11 +53,9 @@ NNetEarlyStoppingCV <-
       #list of what is the training data and what is the validation data
       set.list <- list(train = fold.vec != fold.idx, validation = fold.vec == fold.idx)
      
-      browser()
        for(set.name in names(set.list)){
         #get our prediction for that data
         prediction <- temp.list$pred.mat
-        browser()
         #determine the loss
         if(is.binary){
           # Do 0-1 loss

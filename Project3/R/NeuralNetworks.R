@@ -1,5 +1,5 @@
 #Neural Network algorithm
-#'
+#' @title neural network
 #' @param x.mat matrix of size [n x p]
 #' @param y.vec vector of size n
 #' @param max.iterations integer > 1
@@ -12,6 +12,15 @@
 #' @export
 #'
 #' @examples
+#' library(neuralnetwork)
+#' data(ozone, package="ElemStatLearn")
+#' head(ozone)
+#' x.mat <- as.matrix(ozone[,-1])
+#' y.vec <- ozone[,1]
+#' n.hidden.units <- 4
+#' step.size <- .5
+#' is.train <- !logical(nrow(x.mat))
+#' neuralnetwork::NNetIterations(x.mat,y.vec,max.iterations,step.size,n.hidden.units,is.train)
 NNetIterations <- function(x.mat, y.vec, max.iterations, step.size, n.hidden.units, is.train) {
 #see the demoProject3.R file for a starting point on the NNet algorithm
   
