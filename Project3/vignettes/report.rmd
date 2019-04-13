@@ -39,12 +39,12 @@ final.mat <- matrix(1:12, nrow = 5, dimnames = list(c("Fold-1","Fold-2","Fold-3"
 for(test.fold in 1:n.folds){
   is.test <- fold.vec == test.fold
     is.train <- !is.test
-    x.test <- data.set$features[is.test,]
+    x.test <- as.vector(x.mat[is.test,])
     #x.mat <- as.matrix(data.set$features[is.train,])
     #y.vec <- as.vector(data.set$labels[is.train])
     sub.fold.vec<-sample(rep(1:5,l=nrow(x.train)))
     early.stop.list <- neuralnetwork::NNetEarlyStoppingCV(x.mat=x.mat,y.vec=y.vec,fold.vec=sub.fold.vec,max.iterations=max.iterations,step.size=step.size,n.hidden.units=n.hidden.units,n.fold=n.folds)
-    #predictor <- early.stop.list$predict(....)
+    predictor <- early.stop.list$predict(x.test)
     valid.loss <- early.stop.list$mean.validation.loss.vec
     train.loss <- early.stop.list$mean.train.loss.vec
     steps <-early.stop.list$selected.steps
