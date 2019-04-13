@@ -28,39 +28,25 @@ data <- data(prostate, package="ElemStatLearn")
 data.set <- prostate[, -dim(prostate)[2]]
 data.set$labels <- data.set[, dim(data.set)[2]]
 data.set$features <- data.set[,-dim(data.set)[2]]
-max.iterations <- 10
+max.iterations <- 200
 n.folds <- 5
 step.size <- .5
-n.hidden.units <- 1
+n.hidden.units <- 4
 fold.vec <- sample(rep(1:n.folds,l=nrow(data.set$features)))
-final.mat <- matrix(1:12, nrow = 5, dimnames = list(c("Set-1","Set-2","Set-3","Set-4","Set-5"), c("Early-Stop","L2-Predict","Baseline")))
-#starts at 1
+final.mat <- matrix(1:12, nrow = 5, dimnames = list(c("Set-1","Set-2","Set-3","Set-4","Set-5"), c("Mean Validation Loss","Mean Train Loss","Selected Steps")))
+
 for(test.fold in 1:n.folds){
   is.test <- fold.vec == test.fold
     is.train <- !is.test
     x.train <- as.matrix(data.set$features[is.train,])
     y.train <- as.matrix(data.set$labels[is.train])
     sub.fold.vec<-sample(rep(1:5,l=nrow(x.train)))
-    #Display the mean of the Train labels
-    mean(y.train)
-    x.test <- data.set$features[is.test,]
-    y.test <- data.set$labels[is.test]
-    penalty.vec=c(5,4,3,2,1)
-    baseline <- mean(y.train)
-    #fit <- linearmodels:: LMSquareLossIterations(x.train, y.train,30,1)
-    #pred.vec <- as.matrix(cbind(c(rep(1, dim(x.test)[1])),x.test))%*%as.matrix(fit)
-    sqr.loss.vec <- (y.test - t(rowMeans(pred.vec)))^2
-    plot(sqr.loss.vec)
-    sqr.loss.vec
-    early.stop.list <- neuralnetwork:: NNetEarlyStoppingCV(x.train, y.train, sub.fold.vec, 30, step.size, n.hidden.units, n.folds)
+    early.stop.list <- neuralnetwork::NNetEarlyStoppingCV(x.mat=x.mat,y.vec=y.vec,fold.vec=sub.fold.vec,max.iterations=max.iterations,step.size=step.size,n.hidden.units=n.hidden.units,n.fold=n.folds)
     #square.loss <- neuralnetwork:: LMSquareLossL2(x.train, y.train, penalty.vec,1,fit)
     #Inserts into our final matrix
-      #early stopping predictor
-    final.mat[test.fold,1] = early.stop.list$mean.validation.loss.vec
-      #L2 regularized predictor
-    final.mat[test.fold,2] = early.stop.list$mean.train.loss.vec
-      #baseline/un-informed predictor
-    final.mat[test.fold,3] = early.stop.list$selected.steps
+   # final.mat[1] = early.stop.list$mean.validation.loss.vec
+    #final.mat[2] = early.stop.list$mean.train.loss.vec
+    #final.mat[test.fold,3] = early.stop.list$selected.steps
     early.stop.list
 }
 library(gridExtra)
