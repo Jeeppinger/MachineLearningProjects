@@ -38,21 +38,19 @@ final.mat <- matrix(1:10, nrow = 5, dimnames = list(c("Fold-1","Fold-2","Fold-3"
 for(test.fold in 1:n.folds){
   is.test <- fold.vec == test.fold
     is.train <- !is.test
-    x.test <- as.vector(x.mat[is.test,])
+    x.test <- x.mat[is.test,]
     y.train <- as.matrix(data.set$labels[is.train])
     baseline <- mean(y.train)
-    #x.mat <- as.matrix(data.set$features[is.train,])
-    #y.vec <- as.vector(data.set$labels[is.train])
     sub.fold.vec<-sample(rep(1:5,l=nrow(x.mat)))
     early.stop.list <- neuralnetwork::NNetEarlyStoppingCV(x.mat=x.mat,y.vec=y.vec,fold.vec=sub.fold.vec,max.iterations=max.iterations,step.size=step.size,n.hidden.units=n.hidden.units,n.fold=n.folds)
-    predictor <- early.stop.list$predict(x.test2)
+    #predictor <- early.stop.list$predict(x.test)
     valid.loss <- early.stop.list$mean.validation.loss.vec
     train.loss <- early.stop.list$mean.train.loss.vec
     steps <-early.stop.list$selected.steps
     plot(c(valid.loss),type="o", col="blue", pch="o", lty=1)
     points(c(train.loss), col="red", pch="*")
     lines(c(train.loss), col="red",lty=2)
-    final.mat[test.fold,1] = mean(predictor)
+    #final.mat[test.fold,1] = mean(predictor)
     final.mat[test.fold,2] = baseline
 }
 library(gridExtra)
@@ -61,7 +59,7 @@ d <- head(final.mat)
 grid.table(d)
 ```
 ####Analysis of The Data Set
-<p>By observing our results, we can see that something did go wrong with our code since the Train and Validation set are Identical to each other. This could be something we could debug to fix later on.</p>
+<p>By observing our results, we can see that something did go wrong with our code since the Train and Validation set are Identical to each other. This could be something we could debug to fix later on. By observing the baseline and the prediction, we can see that in this scenario the baseline is more accurate becuase we were unable to provide the prediction</p>
 
 ##Data set 2: Ozone
 
@@ -85,18 +83,16 @@ for(test.fold in 1:n.folds){
     x.test <- as.vector(x.mat[is.test,])
     y.train <- as.matrix(data.set$labels[is.train])
     baseline <- mean(y.train)
-    #x.mat <- as.matrix(data.set$features[is.train,])
-    #y.vec <- as.vector(data.set$labels[is.train])
     sub.fold.vec<-sample(rep(1:5,l=nrow(x.mat)))
     early.stop.list <- neuralnetwork::NNetEarlyStoppingCV(x.mat=x.mat,y.vec=y.vec,fold.vec=sub.fold.vec,max.iterations=max.iterations,step.size=step.size,n.hidden.units=n.hidden.units,n.fold=n.folds)
-    predictor <- early.stop.list$predict(x.test2)
+    #predictor <- early.stop.list$predict(x.test2)
     valid.loss <- early.stop.list$mean.validation.loss.vec
     train.loss <- early.stop.list$mean.train.loss.vec
     steps <-early.stop.list$selected.steps
     plot(c(valid.loss),type="o", col="blue", pch="o", lty=1)
     points(c(train.loss), col="red", pch="*")
     lines(c(train.loss), col="red",lty=2)
-    final.mat[test.fold,1] = mean(predictor)
+    #final.mat[test.fold,1] = mean(predictor)
     final.mat[test.fold,2] = baseline
 }
 library(gridExtra)
@@ -105,10 +101,10 @@ d <- head(final.mat)
 grid.table(d)
 ```
 ####Analysis of The Data Set
-<p>By observing our results, we can see that something did go wrong with our code since the Train and Validation set are Identical to each other. This could be something we could debug to fix later on.</p>
+<p>By observing our results, we can see that something did go wrong with our code since the Train and Validation set are Identical to each other. This could be something we could debug to fix later on. By observing the baseline and the prediction, we can see that in this scenario the baseline is more accurate becuase we were unable to provide the prediction</p>
 
 
-##Data set 3 Ozone
+##Data set 3 Zip.train
 
 ### Matrix of loss values and plot of predictions
 ```{r,fig.width = 6}
@@ -126,8 +122,6 @@ n.folds <- 5
 max.iterations <- 200
 step.size <- .25
 n.hidden.units <- 4
-results.list <- list()
-mean.loss.list <- list()
 final.mat <- matrix(1:10, nrow = n.folds, dimnames = list(c("Fold-1","Fold-2","Fold-3","Fold-4","Fold-5"), c("Predictor","Baseline")))
 for(data.name in names(data.list)){
   data.set <- data.list[[data.name]]
@@ -147,14 +141,14 @@ for(data.name in names(data.list)){
     ##plot(fit$mean.loss$mean.loss)
     early.stop.list <- neuralnetwork::NNetEarlyStoppingCV(x.mat=x.mat,y.vec=y.vec,fold.vec=sub.fold.vec,max.iterations=max.iterations,step.size=step.size,n.hidden.units=n.hidden.units,n.fold=n.folds)
     x.test <- x.mat[,-1]
-    predictor <- early.stop.list$predict(x.test)
+    #predictor <- early.stop.list$predict(x.test)
     valid.loss <- early.stop.list$mean.validation.loss.vec
     train.loss <- early.stop.list$mean.train.loss.vec
     steps <-early.stop.list$selected.steps
     plot(c(valid.loss),type="o", col="blue", pch="o", lty=1)
     points(c(train.loss), col="red", pch="*")
     result.mat.list[[test.fold]] <- do.call(c, test.fold.result.list)
-    final.mat[test.fold,1] = mean(predictor)
+    #final.mat[test.fold,1] = mean(predictor)
     final.mat[test.fold,2] = baseline
   }
 }
@@ -164,7 +158,7 @@ d <- head(final.mat)
 grid.table(d)
 ```
 ####Analysis of The Data Set
-<p>By observing our results, we can see that something did go wrong with our code since the Train and Validation set are Identical to each other. This could be something we could debug to fix later on.</p>
+<p>By observing our results, we can see that something did go wrong with our code since the Train and Validation set are Identical to each other. This could be something we could debug to fix later on. By observing the baseline and the prediction, we can see that in this scenario the baseline is more accurate becuase we were unable to provide the prediction</p>
 
 
 ##Data set :SAHeart
@@ -176,13 +170,11 @@ data.set <- SAheart[, -dim(SAheart)[2]]
 data.set$labels <- data.set[, dim(data.set)[2]]
 data.set$features <- data.set[,-dim(data.set)[2]]
 set.seed(1)
+n.folds <- 5
 fold.vec <- sample(rep(1:n.folds,l=nrow(data.set$features)))
-n.folds <- 4
 max.iterations <- 200
 step.size <- .25
 n.hidden.units <- 4
-results.list <- list()
-mean.loss.list <- list()
 final.mat <- matrix(1:10, nrow = 5, dimnames = list(c("Fold-1","Fold-2","Fold-3","Fold-4","Fold-5"), c("Predictor","Baseline")))
 for(test.fold in 1:n.folds){
   is.test <- fold.vec == test.fold
@@ -201,15 +193,15 @@ for(test.fold in 1:n.folds){
     baseline <- mode[which.max(tabulate(match(y.vec, mode)))]
     ##plot(fit$mean.loss$mean.loss)
     early.stop.list <- neuralnetwork::NNetEarlyStoppingCV(x.mat=x.mat,y.vec=y.vec,fold.vec=sub.fold.vec,max.iterations=max.iterations,step.size=step.size,n.hidden.units=n.hidden.units,n.fold=n.folds)
+    
     x.test <- x.mat[,-1]
-    predictor <- early.stop.list$predict(x.test)
+    #predictor <- early.stop.list$predict(x.test)
     valid.loss <- early.stop.list$mean.validation.loss.vec
     train.loss <- early.stop.list$mean.train.loss.vec
     steps <-early.stop.list$selected.steps
     plot(c(valid.loss),type="o", col="blue", pch="o", lty=1)
     points(c(train.loss), col="red", pch="*")
-    result.mat.list[[test.fold]] <- do.call(c, test.fold.result.list)
-    final.mat[test.fold,1] = mean(predictor)
+    #final.mat[test.fold,1] = mean(predictor)
     final.mat[test.fold,2] = baseline
   }
 library(gridExtra)
@@ -218,7 +210,7 @@ d <- head(final.mat)
 grid.table(d)
 ```
 ####Analysis of The Data Set
-<p>By observing our results, we can see that something did go wrong with our code since the Train and Validation set are Identical to each other. This could be something we could debug to fix later on.</p>
+<p>By observing our results, we can see that something did go wrong with our code since the Train and Validation set are Identical to each other. This could be something we could debug to fix later on.By observing the baseline and the prediction, we can see that in this scenario the baseline is more accurate becuase we were unable to provide the prediction</p>
 
 
 ##Dataset : Spam
@@ -235,12 +227,10 @@ data.list <- list(
   zip.train=list(
     features=zip.train[is.01,-1],
     labels=as.integer(zip.train[is.01,1])))
-n.folds <- 4
+n.folds <- 5
 max.iterations <- 200
 step.size <- .25
 n.hidden.units <- 4
-results.list <- list()
-mean.loss.list <- list()
 final.mat <- matrix(1:10, nrow = 5, dimnames = list(c("Fold-1","Fold-2","Fold-3","Fold-4","Fold-5"), c("Predictor","Baseline")))
 for(data.name in names(data.list)){
   data.set <- data.list[[data.name]]
@@ -260,14 +250,13 @@ for(data.name in names(data.list)){
     ##plot(fit$mean.loss$mean.loss)
     early.stop.list <- neuralnetwork::NNetEarlyStoppingCV(x.mat=x.mat,y.vec=y.vec,fold.vec=sub.fold.vec,max.iterations=max.iterations,step.size=step.size,n.hidden.units=n.hidden.units,n.fold=n.folds)
     x.test <- x.mat[,-1]
-    predictor <- early.stop.list$predict(x.test)
+    #predictor <- early.stop.list$predict(x.test)
     valid.loss <- early.stop.list$mean.validation.loss.vec
     train.loss <- early.stop.list$mean.train.loss.vec
     steps <-early.stop.list$selected.steps
     plot(c(valid.loss),type="o", col="blue", pch="o", lty=1)
     points(c(train.loss), col="red", pch="*")
-    result.mat.list[[test.fold]] <- do.call(c, test.fold.result.list)
-    final.mat[test.fold,1] = mean(predictor)
+    #final.mat[test.fold,1] = mean(predictor)
     final.mat[test.fold,2] = baseline
   }
 }
@@ -277,4 +266,4 @@ d <- head(final.mat)
 grid.table(d)
 ```
 ####Analysis of The Data Set
-<p>By observing our results, we can see that something did go wrong with our code since the Train and Validation set are Identical to each other. This could be something we could debug to fix later on.</p>
+<p>By observing our results, we can see that something did go wrong with our code since the Train and Validation set are Identical to each other. This could be something we could debug to fix later on. By observing the baseline and the prediction, we can see that in this scenario the baseline is more accurate becuase we were unable to provide the prediction.</p>
