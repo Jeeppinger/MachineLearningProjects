@@ -1,28 +1,10 @@
----
-title: ""
-author: "Allen, Joe, Madi"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Report for project 3 on neural networks}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
-<a id="top"></a>
-<h1>Neural Networks</h1>
-### Joe Eppinger, Madison Boman, and Allen Clarke
-#### NAU April 12, 2019
-
-```{r setup, include = FALSE}
+## ----setup, include = FALSE----------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-```
-## Data set 1: prostate
 
-### Matrix of loss values and plot of predictions
-```{r,fig.width = 6}
+## ----fig.width = 6-------------------------------------------------------
 data <- data(prostate, package="ElemStatLearn")
 data.set <- prostate[, -dim(prostate)[2]]
 data.set$labels <- data.set[, dim(data.set)[2]]
@@ -57,14 +39,8 @@ library(gridExtra)
 library(grid)
 d <- head(final.mat)
 grid.table(d)
-```
-####Analysis of The Data Set
-<p>By observing our results, we can see that something did go wrong with our code since the Train and Validation set are Identical to each other. This could be something we could debug to fix later on. By observing the baseline and the prediction, we can see that in this scenario the baseline is more accurate becuase we were unable to provide the prediction</p>
 
-##Data set 2: Ozone
-
-### Matrix of loss values and plot of predictions
-```{r,fig.width = 6}
+## ----fig.width = 6-------------------------------------------------------
 data <- data(ozone, package="ElemStatLearn")
 data.set <- ozone[, -dim(ozone)[2]]
 data.set$labels <- data.set[, dim(data.set)[2]]
@@ -99,15 +75,8 @@ library(gridExtra)
 library(grid)
 d <- head(final.mat)
 grid.table(d)
-```
-####Analysis of The Data Set
-<p>By observing our results, we can see that something did go wrong with our code since the Train and Validation set are Identical to each other. This could be something we could debug to fix later on. By observing the baseline and the prediction, we can see that in this scenario the baseline is more accurate becuase we were unable to provide the prediction</p>
 
-
-##Data set 3 Zip.train
-
-### Matrix of loss values and plot of predictions
-```{r,fig.width = 6}
+## ----fig.width = 6-------------------------------------------------------
 # data(spam, package="ElemStatLearn")
 # data(zip.train, package = "ElemStatLearn")
 # is.01 <- zip.train[,1] %in% c(0,1)
@@ -155,15 +124,8 @@ grid.table(d)
 # library(grid)
 # d <- head(final.mat)
 # grid.table(d)
-```
-####Analysis of The Data Set
-<p>By observing our results, we can see that something did go wrong with our code since the Train and Validation set are Identical to each other. This could be something we could debug to fix later on. By observing the baseline and the prediction, we can see that in this scenario the baseline is more accurate becuase we were unable to provide the prediction</p>
 
-
-##Data set :SAHeart
-
-### Matrix of loss values and plot of predictions
-```{r,fig.width = 6}
+## ----fig.width = 6-------------------------------------------------------
 # data(SAheart, package="ElemStatLearn")
 # data.set <- SAheart[, -dim(SAheart)[2]]
 # data.set$labels <- data.set[, dim(data.set)[2]]
@@ -206,15 +168,8 @@ grid.table(d)
 # library(grid)
 # d <- head(final.mat)
 # grid.table(d)
-```
-####Analysis of The Data Set
-<p>By observing our results, we can see that something did go wrong with our code since the Train and Validation set are Identical to each other. This could be something we could debug to fix later on.By observing the baseline and the prediction, we can see that in this scenario the baseline is more accurate becuase we were unable to provide the prediction</p>
 
-
-##Dataset : Spam
-
-### Matrix of loss values and plot of predictions
-```{r,fig.width = 6}
+## ----fig.width = 6-------------------------------------------------------
 # data(spam, package="ElemStatLearn")
 # data(zip.train, package = "ElemStatLearn")
 # is.01 <- zip.train[,1] %in% c(0,1)
@@ -262,6 +217,4 @@ grid.table(d)
 # library(grid)
 # d <- head(final.mat)
 # grid.table(d)
-```
-####Analysis of The Data Set
-<p>By observing our results, we can see that something did go wrong with our code since the Train and Validation set are Identical to each other. This could be something we could debug to fix later on. By observing the baseline and the prediction, we can see that in this scenario the baseline is more accurate becuase we were unable to provide the prediction.</p>
+
