@@ -139,7 +139,7 @@ for(data.name in names(data.list)){
   for(test.fold in 1:n.folds){
     is.test <- fold.vec == test.fold
     is.train <- !is.test
-    
+    x.mat <- as.matrix(data.set$features[is.train,])
     y.vec <- as.vector(data.set$labels[is.train])
     sub.fold.vec <- as.vector(sample(rep(1:n.folds,l=nrow(x.mat))))
     mode <- unique(y.vec)
