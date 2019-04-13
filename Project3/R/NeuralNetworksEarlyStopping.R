@@ -5,6 +5,7 @@
 #' @param max.iterations integer > 1
 #' @param step.size integer > 1
 #' @param n.hidden.units nunmber of hidden units >= 1
+#' @param n.folds number of folds >=1
 #' 
 #' @return results.list a list with pred.mat, v.mat, w.vec, predict function that takes (testx.mat), mean.validaiton.loss.vec, selected.steps
 #'
@@ -25,7 +26,31 @@
 
 NNetEarlyStoppingCV <-
   function(x.mat, y.vec, fold.vec = sample(rep(1:n.folds), length(y.vec),TRUE), max.iterations, step.size, n.hidden.units, n.folds = 4) {
-    
+    # error checking
+    if(class(x.mat)!="matrix"){
+      return("ERROR: x.mat is not a matrix")
+    }
+    if(class(y.vec)!="numeric"){
+      return("ERROR: y.vec is not a vector")
+    }
+    if(nrow(x.mat)!=length(y.vec)) {
+      return("ERROR: Mismatching x.mat and y.vec dimensions")
+    }
+    if(class(fold.vec)!="integer"){
+      return("ERROR: fold.vec is not a vector")
+    }
+    if(class(max.iterations)!="numeric"){
+      return("ERROR: max.iterations is not an numeric")
+    }
+    if(class(step.size)!="numeric"){
+      return("ERROR: step.size is not a numeric")
+    }
+    if(class(n.hidden.units)!="numeric"){
+      return("ERROR: n.hidden.units is not an numeric")
+    }
+    if(class(n.folds)!="numeric"){
+      return("ERROR: n.folds is not an numeric")
+    }
     is.binary <- all(y.vec %in% c(-1,0,1))
     #set n folds correctly
     n.folds <- length(unique(fold.vec))
@@ -45,7 +70,7 @@ NNetEarlyStoppingCV <-
       validation.index <- which(fold.vec == fold.idx)
       train.vec <- (fold.vec != fold.idx)
       head(x.mat)
-      temp.list <-NNetIterations(x.mat, y.vec, max.iterations, step.size, n.hidden.units, train.vec)
+      temp.list <-NNetIterations(as.matrix(x.mat), as.numeric(y.vec), as.numeric(max.iterations), as.numeric(step.size), as.numeric(n.hidden.units), as.logical(train.vec))
       
       V.mat <- temp.list$V.mat
       w.vec <- temp.list$w.vec
@@ -82,7 +107,7 @@ NNetEarlyStoppingCV <-
     
     #get the best step size results
     is.train <- !logical(nrow(x.mat))
-    result.list <- NNetIterations(x.mat, y.vec, selected.steps, step.size, n.hidden.units, is.train)
+    result.list <- NNetIterations(as.matrix(x.mat), as.numeric(y.vec), as.numeric(selected.steps), as.numeric(step.size), as.numeric(n.hidden.units), as.logical(is.train))
     
     
     #add to the list
