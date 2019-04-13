@@ -30,29 +30,34 @@ data.set$labels <- data.set[, dim(data.set)[2]]
 data.set$features <- data.set[,-dim(data.set)[2]]
 max.iterations <- 200
 n.folds <- 5
-step.size <- .5
+step.size <- .25
 n.hidden.units <- 4
 fold.vec <- sample(rep(1:n.folds,l=nrow(data.set$features)))
-final.mat <- matrix(1:12, nrow = 5, dimnames = list(c("Set-1","Set-2","Set-3","Set-4","Set-5"), c("Mean Validation Loss","Mean Train Loss","Selected Steps")))
+final.mat <- matrix(1:12, nrow = 5, dimnames = list(c("Fold-1","Fold-2","Fold-3","Fold-4","Fold-5"), c("Mean Validation Loss","Mean Train Loss","Selected Steps")))
 
 for(test.fold in 1:n.folds){
   is.test <- fold.vec == test.fold
     is.train <- !is.test
-    x.train <- as.matrix(data.set$features[is.train,])
-    y.train <- as.matrix(data.set$labels[is.train])
+    x.test <- data.set$features[is.test,]
+    x.mat <- as.matrix(data.set$features[is.train,])
+    y.vec <- as.matrix(data.set$labels[is.train])
     sub.fold.vec<-sample(rep(1:5,l=nrow(x.train)))
     early.stop.list <- neuralnetwork::NNetEarlyStoppingCV(x.mat=x.mat,y.vec=y.vec,fold.vec=sub.fold.vec,max.iterations=max.iterations,step.size=step.size,n.hidden.units=n.hidden.units,n.fold=n.folds)
     #square.loss <- neuralnetwork:: LMSquareLossL2(x.train, y.train, penalty.vec,1,fit)
     #Inserts into our final matrix
-   # final.mat[1] = early.stop.list$mean.validation.loss.vec
-    #final.mat[2] = early.stop.list$mean.train.loss.vec
-    #final.mat[test.fold,3] = early.stop.list$selected.steps
+    #predictor <- early.stop.list$predict(....)
+    valid.loss <- early.stop.list$mean.validation.loss.vec
+    train.loss <- early.stop.list$mean.train.loss.vec
+    steps <-early.stop.list$selected.steps
+    plot(c(valid.loss),type="o", col="blue", pch="o", lty=1)
+    points(c(train.loss), col="red", pch="*")
+    lines(c(train.loss), col="red",lty=2)
     early.stop.list
 }
 library(gridExtra)
 library(grid)
-d <- head(final.mat)
-grid.table(d)
+#d <- head(final.mat)
+#grid.table(d)
 ```
 <h4>Analysis of The Data Set</h4>
 <p>By observing this dataset we can conclude that the L2 is more accurate than the Early-Stopping. Baseline has more accuracy compared to the other two since all the starting numbers are 2 for it. Whereas Early-stop is very sparatic</p>
