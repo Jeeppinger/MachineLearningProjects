@@ -14,7 +14,8 @@ Suggests:
     ElemStatLearn,
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    gridExtra
 VignetteBuilder: knitr
 Encoding: UTF-8
 
