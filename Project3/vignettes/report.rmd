@@ -147,7 +147,6 @@ for(data.name in names(data.list)){
     steps <-early.stop.list$selected.steps
     plot(c(valid.loss),type="o", col="blue", pch="o", lty=1)
     points(c(train.loss), col="red", pch="*")
-    result.mat.list[[test.fold]] <- do.call(c, test.fold.result.list)
     #final.mat[test.fold,1] = mean(predictor)
     final.mat[test.fold,2] = baseline
   }
