@@ -30,9 +30,6 @@ NNetEarlyStoppingCV <-
     if(class(x.mat)!="matrix"){
       return("ERROR: x.mat is not a matrix")
     }
-    if(class(y.vec)!="numeric"){
-      return("ERROR: y.vec is not a vector")
-    }
     if(nrow(x.mat)!=length(y.vec)) {
       return("ERROR: Mismatching x.mat and y.vec dimensions")
     }
