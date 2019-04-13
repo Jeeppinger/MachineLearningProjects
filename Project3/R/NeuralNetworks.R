@@ -19,10 +19,33 @@
 #' y.vec <- ozone[,1]
 #' n.hidden.units <- 4
 #' step.size <- .5
+#' max.iterations <- 200
 #' is.train <- !logical(nrow(x.mat))
 #' neuralnetwork::NNetIterations(x.mat,y.vec,max.iterations,step.size,n.hidden.units,is.train)
 NNetIterations <- function(x.mat, y.vec, max.iterations, step.size, n.hidden.units, is.train) {
 #see the demoProject3.R file for a starting point on the NNet algorithm
+  # Check for errors
+  if(class(x.mat)!="matrix"){
+    return("ERROR: x.mat is not a matrix")
+  }
+  if(class(y.vec)!="numeric"){
+    return("ERROR: y.vec is not a vector")
+  }
+  if(nrow(x.mat)!=length(y.vec)) {
+    return("ERROR: Mismatching x.mat and y.vec dimensions")
+  }
+  if(class(max.iterations)!="numeric"){
+    return("ERROR: max.iterations is not an numeric")
+  }
+  if(class(step.size)!="numeric"){
+    return("ERROR: step.size is not a numeric")
+  }
+  if(class(n.hidden.units)!="numeric"){
+    return("ERROR: n.hidden.units is not an numeric")
+  }
+  if(class(is.train)!="logical"){
+    return("ERROR: is.train is not an vector")
+  }
   
   is.binary <- all(y.vec %in% c(-1,0,1))
   
