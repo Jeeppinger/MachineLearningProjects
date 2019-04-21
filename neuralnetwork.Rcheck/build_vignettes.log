@@ -1,0 +1,4 @@
+Quitting from lines 26-60 (report.rmd) 
+Error: processing vignette 'report.rmd' failed with diagnostics:
+there is no package called 'gridExtra'
+Execution halted

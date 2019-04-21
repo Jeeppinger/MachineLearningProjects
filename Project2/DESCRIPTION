@@ -3,7 +3,7 @@ Type: Package
 Title: gradient descent
 Version: 2019.2.20
 Author: ML Group
-Maintainer: ML Group <mrb475@nau.edu>
+Maintainer: ML Group <jee77@nau.edu>
 Description: Code to show c++ code in an R package. This package is an implementation of the 
     gradient descent algorithm for the purposes ofa CS499 course at NAU. The package shows 
     the basic interaction between c++ code and R. 

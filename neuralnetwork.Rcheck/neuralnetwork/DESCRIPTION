@@ -10,12 +10,9 @@ Description: Code to show c++ code in an R package. This package is an implement
 License: GPL-3
 ReoxygenNote: 6.1.1
 RoxygenNote: 6.1.1
-Suggests: 
-    ElemStatLearn,
-    testthat,
-    knitr,
-    rmarkdown,
-    gridExtra
+Suggests: ElemStatLearn, testthat, knitr, rmarkdown
 VignetteBuilder: knitr
 Encoding: UTF-8
-
+NeedsCompilation: no
+Packaged: 2019-04-13 06:53:27 UTC; Joe
+Built: R 3.5.2; ; 2019-04-13 06:53:32 UTC; windows
