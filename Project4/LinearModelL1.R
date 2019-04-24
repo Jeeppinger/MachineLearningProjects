@@ -12,7 +12,8 @@
 #'
 #' @examples
 LinearModelL1 <- function(x.scaled.mat, y.vec, penalty, opt.thresh, initial.weight.vec, step.size) {
-  
+  #1/n ∑i=1^n L[w^T x_i + b, y_i] + penalty * ||w||_1
+  #trying to use the cost function written above
 }
 
 #' @param x.mat matrix of size [n x p]
@@ -22,7 +23,9 @@ LinearModelL1 <- function(x.scaled.mat, y.vec, penalty, opt.thresh, initial.weig
 #' @return optimal.weight.vector
 
 LinearModelL1penalties <- function(x.mat, y.vec, penalty.vec) {
-  
+  #first scale x mat
+  #then loop over pentalty values
+  #finally unscale the optimal weight vector
 }
 
 #' @param x.mat matrix of size [n x p]
