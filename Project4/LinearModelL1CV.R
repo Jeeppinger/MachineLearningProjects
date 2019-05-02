@@ -55,12 +55,10 @@ LinearModelL1CV <-function(x.mat,y.vec,fold.vec = sample(rep(1:n.folds, l = leng
         if (is.binary) {
           # Do 0-1 loss
           predict <- ifelse(predict > 0.5, 1, 0)
-          loss.vec <-
-            colMeans((ifelse(predict == y.vec[get(set.name, set.list)], 0, 1)))
+          loss.vec <-colMeans((ifelse(predict == y.vec[get(set.name, set.list)], 0, 1)))
         } else{
           # Do square loss
-          loss.vec <-
-            colMeans((predict - y.vec[get(set.name, set.list)]) ^ 2)
+          loss.vec <-colMeans((predict - y.vec[get(set.name, set.list)]) ^ 2)
         }
         
         if (set.name == "train") {
@@ -97,4 +95,4 @@ LinearModelL1CV <-function(x.mat,y.vec,fold.vec = sample(rep(1:n.folds, l = leng
     )
     
     return(result.list)
-  }
+}

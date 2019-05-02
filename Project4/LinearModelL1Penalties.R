@@ -18,7 +18,7 @@ LinearModelL1penalties <- function(x.mat, y.vec, penalty.vec, step.size) {
       stop("x.mat must be a numeric matrix")
     }
     
-    if (!all(is.numeric(y.vec), is.vector(y.vec), length(y.vec) == nrow(x.mat))) {
+    if (!all(is.numeric(y.vec), is.vector(y.vec))) {
       stop("y.vec must be a numeric vector")
     }
     
@@ -31,15 +31,11 @@ LinearModelL1penalties <- function(x.mat, y.vec, penalty.vec, step.size) {
       stop("penalty.vec must be a non-negative decreasing numeric vector")
     }
     
-    if (!all(is.numeric(opt.thresh),length(opt.thresh) == 1, opt.thresh > 0)) {
-      stop("opt.thresh must be a numeric scalar > 0")
-    }
-    
     # Initializing
     n.rows <- nrow(x.mat)
     n.cols <- ncol(x.mat) # p
     n.penalties <- length(penalty.vec)
-    
+    opt.thresh<- 1
     # scale x.mat with m = 0, sd = 1
     col.mean.vec <- colMeans(x.mat)
     col.sd.vec <- sqrt(rowSums((t(x.mat) - col.mean.vec) ^ 2) / n.rows)
@@ -57,7 +53,7 @@ LinearModelL1penalties <- function(x.mat, y.vec, penalty.vec, step.size) {
     # w.temp.mat <- w.mat
     
     for (penalty.idx in c(1:n.penalties)) {
-      w.mat[, penalty.idx] <-LinearModelL1(x.scaled,y.vec,penalty.vec[penalty.idx],opt.thresh,initial.weight.vec,step.size)
+      w.mat[, penalty.idx] <-LinearModelL1(x.scaled,as.numeric(y.vec),penalty.vec[penalty.idx],opt.thresh,initial.weight.vec,step.size)
       
       initial.weight.vec <-w.mat[, penalty.idx] 
     }
@@ -66,4 +62,4 @@ LinearModelL1penalties <- function(x.mat, y.vec, penalty.vec, step.size) {
     w.mat <- rbind(intercept.vec, col.sd.mat %*% w.mat[-1,])
     
     return(w.mat)
-  }
+}
