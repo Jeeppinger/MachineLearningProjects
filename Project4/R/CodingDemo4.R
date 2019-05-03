@@ -25,20 +25,41 @@ b<- 0
 sigmoid<- function(z){
   1/(1+exp(-z)) 
 }
-
 grad.loss<-function(w.vec){
   #binary classification so logistic loss
   pred.vec <- x.sc %*% w
   prob.vec <- sigmoid(-pred.vec * y.tilde)
-  .grad.vec <- - t(x.sc) %*% (y.tilde  * prob.vec)
+  grad.vec <- - t(x.sc) %*% (y.tilde  * prob.vec)
 }
+positive.part<- function (x){
+  ifelse(x<0, 0, x)
+}
+soft<- function (x, lambda){
+  sign(x)*positive.part(abs(x) - lambda)
+}
+l1opt<-function(w.vec, d){
+  ifelse(w.vec==0, 
+         positive.part(abs(d) - lambda), 
+         abs(d-sign(w.vec) * lambda))
+}
+cost.step<- function(step){
+  new.w<-w.step(step)
+  cost.weight(w.step(new.w))
+}
+cost.weight<- function(w.vec){
+  #pred.vec<-x.int%*%w.vec
+  #loss.vec<-
+}
+w.step<- function(step){
+  u.vec<- w+step.size*d.vec
+  c(u.vec[1], soft(u.vec[-1], step.size*lambda))
+}
+
+lambda <- 5
+
 d.vec <- -grad.loss(w)
 step.size<- .5
-u.vec<- w+step.sixe*d.vec
-
-
-soft<- function (x, lambda){
-  sign(x)*(abs(x) - lambda)
-}
-lambda <- 5
+u.vec<- w+step.size*d.vec
 w <- soft(u.vec, step.size*lambda)
+
+lambda.max<- max(abs(grad.vec))
