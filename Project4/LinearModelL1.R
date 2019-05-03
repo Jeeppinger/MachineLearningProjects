@@ -31,7 +31,7 @@ LinearModelL1 <- function(x.scaled.mat, y.vec, penalty, opt.thresh, initial.weig
     }
     
     if (!all(is.numeric(initial.weight.vec), is.vector(initial.weight.vec),length(initial.weight.vec) == ncol(x.scaled.mat) + 1)) {
-      stop("initial.weight.vec must be a numeric vector")
+     # stop("initial.weight.vec must be a numeric vector")
     }
     
     # Initializing functions
@@ -58,8 +58,9 @@ LinearModelL1 <- function(x.scaled.mat, y.vec, penalty, opt.thresh, initial.weig
     
     
     
-    is.binary <- ifelse(y.vec %in% c(0, 1), TRUE, FALSE)
-    max.iteration <- 10000L
+    # Initializing
+    is.binary <- all(ifelse(y.vec %in% c(0, 1), TRUE, FALSE))
+    step.factor <- 2L
     
     if (is.binary) {
       y.vec <- ifelse(y.vec == 0, -1, 1)
@@ -67,91 +68,64 @@ LinearModelL1 <- function(x.scaled.mat, y.vec, penalty, opt.thresh, initial.weig
     
     n.cols <- ncol(x.scaled.mat)   # p 
     n.rows <- nrow(x.scaled.mat)  # n 
-    
+    max.iter <- 50L
     x.train <- cbind(1,x.scaled.mat) # n x (p+1)    
-    w.vec <- rnorm(n.cols) # p x 1
-    intercept <- rnorm(1)
+    # w.vec <- initial.weight.vec[-1] # p x 1
+    # intercept <- initial.weight.vec[1]
     
-    while (1) {
-      if (is.binary) {
-        # do logistic
-        w.gradient.vec <-t(x.train) %*% (y.vec / (1 + exp(y.vec * (x.train %*% w.vec + rep(1,n.rows) * intercept))))
-        
-        intercept.gradient <- t(rep(1,n.rows)) %*% (y.vec / (1 + exp(y.vec * (x.train %*% w.vec + rep(1,n.rows) * intercept))))
-        
-        u.vec <- w.vec + step.size * w.gradient.vec / n.rows
-        intercept <- intercept + step.size * intercept.gradient / n.rows
-        w.vec <- soft(u.vec, step.size * penalty)
-      } else{
-        # do linear square loss
-        w.gradient.vec <- -t(x.train) %*% (x.train %*% w.vec + rep(1,n.rows) * intercept - y.vec)
-        
-        intercept.gradient <- -t(rep(1,n.rows)) %*% (x.train %*% w.vec + rep(1,n.rows) * intercept - y.vec)
-        
-        intercept <- intercept + step.size * intercept.gradient / n.rows
-        u.vec <- w.vec + step.size * w.gradient.vec / n.rows
-        w.vec <- soft(u.vec, step.size * penalty)
-      }
-      
-      temp.w.vec <- c(intercept, w.vec) 
-      if (all(positive.part(w.gradient.vec[w.vec==0] - penalty) < opt.thresh, 
-              positive.part(w.gradient.vec[w.vec!=0] - sign(w.vec[w.vec!=0]) * penalty) < opt.thresh,
-              abs(intercept.gradient) < opt.thresh))
-        break;
+    loss <- function(lst){
+      if (is.binary)
+        mean(log(1+exp(-y.vec * (x.train %*% lst$w.vec))))
+      else
+        mean((x.train %*% lst$w.vec - y.vec)^2)
     }
     
-    w.vec <- c(intercept, w.vec)
-    return(w.vec)
-}  
-
-#' @param x.mat matrix of size [n x p]
-#' @param y.vec vector of size n
-#' @param fold.vec
-#' @param n.folds
-#' @param penalty.vec vector of decreasing penalty values
-#' @param step.size
-#'
-#' @return mean.validation.loss, mean.train.loss.vec, penalty.vec, selected.penalty, weight, predict function
-
-LinearModelL1CV <- function(x.mat, y.vec, fold.vec = sample(rep(1:5, l=nrow(x.mat))), n.folds = 5, penalty.vec, step.size) {
-  #set up our functions that we need
-  sigmoid<- function(z){
-    1/(1+exp(-z)) 
-  }
-  grad.loss<-function(w.vec){
-    #binary classification so logistic loss
-    pred.vec <- x.sc %*% w
-    prob.vec <- sigmoid(-pred.vec * y.tilde)
-    .grad.vec <- - t(x.sc) %*% (y.tilde  * prob.vec)
-  }
-  soft<- function (w, lambda){
-    sign(w)*positive.part(abs(w) - lambda)
-  }
-  positive.part<-function(x){
-    ifelse(x > 0, x, 0)
-  }
-  
-  #first we scale x
-  x.scaled.mat<- scale(x.mat)
-  
-  for (fold.idx in seq(n.folds)) {
-    #split out the training data
-    is.train <- fold.vec != fold.idx
-    x.train<- x.scaled.mat[is.train,]
-    y.train <- y.vec[is.train]
-    #create y tilde
-    y.tilde = ifelse(y.train ==1, 1, -1)
-    #this is where we call our other function, LossPenalties
-    #Compute validation loss for each one
-    #determine the best penalty here
-    #append all penalties together
+    iter.learn <- function(initial.weight.vec, step.size){
+      if (is.binary){ 
+        # do logistic
+        w.gradient.vec <-
+          t(x.train) %*% (y.vec / (1 + exp(-y.vec * (
+            x.train %*% initial.weight.vec))))
+      }else{
+        # do linear square loss
+        w.gradient.vec <- -t(x.train) %*% 
+          (x.train %*% initial.weight.vec - y.vec)
+      }
+      
+      u.vec <- initial.weight.vec + step.size * w.gradient.vec / n.rows
+      initial.weight.vec.new <- c(u.vec[1], soft(u.vec[-1], step.size * penalty))
+      
+      ret <- list(
+        w.vec = initial.weight.vec.new,
+        gradient.vec = w.gradient.vec)
+      return(ret)
+    }
     
-  }
-  #lastly use the optimal penalty to get the result list we need.
-  #return our list of things here.
-  
-  
-  
-  
+    norm.gradient <- function(gradient, w){
+      ifelse(w==0, positive.part(abs(gradient) - penalty),
+             abs(gradient - sign(w) * penalty))
+    }
+    
+    iter <-  0
+    while (1) {
+      while (loss(iter.learn(initial.weight.vec, step.size/2))
+             < loss(iter.learn(initial.weight.vec, step.size))){
+        step.size <- step.size / step.factor
+      }
+      
+      while(loss(iter.learn(initial.weight.vec, step.size*2))
+            < loss(iter.learn(initial.weight.vec, step.size))){
+        step.size <- step.size * step.factor
+      }
+      
+      lst.n <- iter.learn(initial.weight.vec, step.size)
+      initial.weight.vec <- lst.n$w.vec
+      loss(lst.n)
+      can.break <- c(lst.n$gradient.vec[1],
+                     norm.gradient(lst.n$gradient.vec[-1], initial.weight.vec[-1]))
+      iter <- iter + 1
+      if ((norm(as.matrix(abs(can.break)),'2') < opt.thresh) || (iter >= max.iter))
+        break;
+    }
+    return(initial.weight.vec)
 }
-
