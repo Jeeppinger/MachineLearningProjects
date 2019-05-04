@@ -72,7 +72,7 @@ LinearModelL1CV <-function(x.mat,y.vec,fold.vec = sample(rep(1:n.folds, l = leng
     mean.validation.loss.vec <- colMeans(validation.loss.mat)
     selected.penalty.index <- which.min(mean.validation.loss.vec)
     
-    weight.vec <- LinearModelL1penalties(x.mat, y.vec, penalty.vec)[, selected.penalty.index]
+    weight.vec <- LinearModelL1penalties(x.mat, y.vec, penalty.vec,step.size)[, selected.penalty.index]
     
     predict <- function(testx.mat) {
       # Check inputs here
