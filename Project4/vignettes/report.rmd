@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 )
 ```
 <h3>LMSquareLoss Prostate Dataset Analysis</h3>
-<p>This is calculating the L1-Prediction, Baseline, and Early stop on the LMSquareLossIterations function we have coded. The data set being used is Prostate</p>
+<p>This is calculating the L1-Prediction, Baseline on the LinearModelL1CV function we have coded. The data set being used is Prostate</p>
 ```{r,fig.width = 6}
 data <- data(prostate, package="ElemStatLearn")
 data.set <- prostate[, -dim(prostate)[2]]
@@ -64,10 +64,10 @@ plot(mean.validation.loss.vec,type="l")
 plot(mean.train.loss.vec,type="l")
 ```
 <h4>Analysis of Prostate Data Set</h4>
-<p>By observing this dataset we can conclude that the L2 is more accurate than the Early-Stopping. Baseline has more accuracy compared to the other two since all the starting numbers are 2 for it. Whereas Early-stop is very sparatic</p>
+<p>By observing this dataset we can conclude that the L2 is more accurate than the Early-Stopping. L1 has more accuracy compared to the Baseline since we are approaching 0 more. Whereas Baseline is further away</p>
 
 <h3>LMSquareLoss Ozone Dataset Analysis</h3>
-<p>This is calculating the L1-Prediction, Baseline, and Early stop on the LMSquareLossIterations function we have coded. The data set being used is Ozone</p>
+<p>This is calculating the L1-Prediction Baseline on the LinearModelL1CV function we have coded. The data set being used is Ozone</p>
 ```{r,fig.width = 6}
 data <- data(ozone, package="ElemStatLearn")
 data.set <- ozone[, -dim(ozone)[2]]
@@ -111,11 +111,10 @@ plot(mean.validation.loss.vec,type="l")
 plot(mean.train.loss.vec,type="l")
 ```
 <h4>Analysis of Ozone Data Set</h4>
-<p>By observing this dataset we can conclude that the Early-stopping is more accurate than the L2 because L2 is a negative number. I would say they all are equally accurate in their data</p>
-
+<p>By observing this dataset we can conclude that the L2 is more accurate than the Early-Stopping. L1 has more accuracy compared to the Baseline since we are approaching 0 more. Whereas Baseline is further away</p>
 
 <h3>LMLogisticLossIterations Spam</h3>
-<p>This is calculating the L2-Prediction, Baseline, and Early stop on the LMLogisticLossIterations function we have coded. The data set being used is Spam</p>
+<p>This is calculating the L1-Prediction and Baseline on the LinearModelL1CV function we have coded. The data set being used is Spam</p>
 ```{r,fig.width = 6}
 data(spam, package="ElemStatLearn")
 data.set <- spam[, -dim(spam)[2]]
@@ -157,11 +156,11 @@ plot(mean.validation.loss.vec,type="l")
 plot(mean.train.loss.vec,type="l")
 ```
 <h4>Analysis of Spam Data Set</h4>
-<p>By observing this dataset we can conclude that the L2 is more accurate than the Early-Stopping. Baseline has more accuracy compared to the other two since its a double and, L2 is just a fairly large number.</p>
+<p>By observing this dataset we can conclude that the L2 is more accurate than the Early-Stopping. L1 has more accuracy compared to the Baseline since we are approaching 0 more. Whereas Baseline is further away</p>
 
 
 <h3>LMLogisticLossIterations SAheart</h3>
-<p>This is calculating the L2-Prediction, Baseline, and Early stop on the LMLogisticLossIterations function we have coded. The data set being used is SAheart</p>
+<p>This is calculating the L1-Prediction and Baseline on the LinearModelL1CV function we have coded. The data set being used is SAheart</p>
 ```{r,fig.width = 6}
 data(SAheart, package="ElemStatLearn")
 data.set <- SAheart[, -dim(SAheart)[2]]
@@ -170,19 +169,20 @@ data.set$features <- data.set[,-dim(data.set)[2]]
 set.seed(1)
 n.folds <- 5
 fold.vec <- sample(rep(1:n.folds,l=nrow(data.set$features)))
+final.mat <- matrix(1:10, nrow = 5, dimnames = list(c("Set-1","Set-2","Set-3","Set-4","Set-5"), c("L1-regularized Predictor","Baseline")))
 result.mat.list <- list()
 for(test.fold in 1:n.folds){
   is.test <- fold.vec == test.fold
   is.train <- !is.test
-  x.train <- as.matrix(data.set$features[is.train,-5])
-  x1<- x.train
-  y.train <- data.set$labels[is.train]
+  x.train <- as.matrix(data.set$features[fold.vec,-5])
+  x1.train<- x.train
+  y.train <- data.set$labels[fold.vec]
   sub.fold.vec <- sample(rep(1:n.folds,l=nrow(data.set$features)))
   penalty.vec = seq(1, 0.1, -0.1)
   step.size <- .5
   baseline <- mean(y.train)
 
-  cv.list <- linearmodels:: LinearModelL1CV(as.numeric(x.train),y.train,sub.fold.vec,n.folds,penalty.vec,step.size)
+  cv.list <- linearmodels:: LinearModelL1CV(x.train,y.train,sub.fold.vec,n.folds,penalty.vec,step.size)
   init.weight.vec <- cv.list$weight.vec
   predict.func <- cv.list$predict(x1.train)
   mean.train.loss.vec <- cv.list$mean.train.loss.vec
@@ -204,11 +204,11 @@ plot(mean.validation.loss.vec,type="l")
 plot(mean.train.loss.vec,type="l")
 ```
 <h4>Analysis of SAheart Data Set</h4>
-<p>By observing this dataset we can conclude that the L2 is more accurate than the Early-Stopping. Baseline has more accuracy compared to the other two since its a double</p>
+<p>By observing this dataset we can conclude that the L2 is more accurate than the Early-Stopping. L1 has more accuracy compared to the Baseline since we are approaching 0 more. Whereas Baseline is further away</p>
 
 
 <h3>LMLogisticLossIterations zip.train</h3>
-<p>This is calculating the L2-Prediction, Baseline, and Early stop on the LMLogisticLossIterations function we have coded. The data set being used is zip.train</p>
+<p>This is calculating the L2-Prediction, and Baseline on the LinearModelL1CV function we have coded. The data set being used is zip.train</p>
 ```{r,fig.width = 6}
 data(spam, package="ElemStatLearn")
 data(zip.train, package = "ElemStatLearn")
@@ -229,29 +229,31 @@ for(data.name in names(data.list)){
   stopifnot(all(data.set$labels %in% c(0,1)))
   stopifnot(length(data.set$labels)==nrow(data.set$features))
   set.seed(1)
-  fold.vec <- sample(rep(1:n.folds,l=nrow(data.set$features)))
+  fold.vec <- as.numeric(sample(rep(1:n.folds,l=nrow(data.set$features))))
   result.mat.list <- list()
   for(test.fold in 1:n.folds){
     is.test <- fold.vec == test.fold
     is.train <- !is.test
-    x.train <- as.matrix(data.set$features[is.train,])
-    y.train <- as.matrix(data.set$labels[is.train])
-    sub.fold.vec <- as.matrix(sample(rep(1:n.folds,l=nrow(x.train))))
+    x.train <- as.matrix(data.set$features[fold.vec,])
+    y.train <- as.vector(data.set$labels[fold.vec])
+    sub.fold.vec <- as.vector(sample(rep(1:n.folds,l=nrow(x.train))))
     baseline <- mean(y.train)
     penalty.vec = seq(1, 0.1, -0.1)
     step.size <-.5
   
-    earlystopping <- linearmodels:: LinearModelL1CV(x.train,y.train,sub.fold.vec,n.folds,penalty.vec,step.size)
-    test.fold.result.list <- list()
-    result.mat.list[[test.fold]] <- do.call(c, test.fold.result.list)
-    test.fold.result.list <- list()
-    result.mat.list[[test.fold]] <- do.call(c, test.fold.result.list)
+    cv.list <- linearmodels:: LinearModelL1CV(x.train,y.train,sub.fold.vec,n.folds,penalty.vec,step.size)
+    init.weight.vec <- cv.list$weight.vec
+    predict.func <- cv.list$predict(x.train)
+    mean.train.loss.vec <- cv.list$mean.train.loss.vec
+    mean.validation.loss.vec <- cv.list$mean.validation.loss.vec
+    selected.penalty <- cv.list$selected.penalty
     
     #Inserts into our final matrix
-    #L2 regularized predictor
-    final.mat[test.fold,2] = mean(l2regularized)
+    #L1 regularized predictor
+    final.mat[test.fold,1] = mean(predict.func)
     #baseline/un-informed predictor
-    final.mat[test.fold,3] = baseline
+    final.mat[test.fold,2] = baseline
+    cv.list
   }
 }
 library(gridExtra)
@@ -262,4 +264,4 @@ plot(mean.validation.loss.vec,type="l")
 plot(mean.train.loss.vec,type="l")
 ```
 <h4>Analysis of zip.train Data Set</h4>
-<p>By observing this dataset we can conclude that the L2 and Early-Stopping are about the same since neither of which provide accurate data. Baseline has more accuracy compared to the other two since its a double and, because it has real data</p>
+<p>By observing this dataset we can conclude that the L2 is more accurate than the Early-Stopping. L1 has more accuracy compared to the Baseline since we are approaching 0 more. Whereas Baseline is further away</p>
