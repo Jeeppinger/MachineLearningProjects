@@ -28,7 +28,7 @@ result.list
 This algorithm splits the data into several folds and apply LinealModelL1penalites to each fold
 }
 \examples{
-#' library(linearmodels)
+library(linearmodels)
 data(zip.train, package="ElemStatLearn")
 all.y.vec<-zip.train[, 1]
 is.01 <- all.y.vec \%in\% c(0,1)

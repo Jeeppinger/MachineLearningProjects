@@ -26,3 +26,16 @@ optimal.weight.vector
 \description{
 Linear Model with L1 regularization
 }
+\examples{
+library(linearmodels)
+data(zip.train, package="ElemStatLearn")
+all.y.vec<-zip.train[, 1]
+is.01 <- all.y.vec \%in\% c(0,1)
+y.vec <- all.y.vec[is.01]
+x.mat <- zip.train[is.01,-1]
+n.cols <- ncol(x.mat)
+initial.weight.vec <- rep(0, n.cols + 1)
+penalty <- 1
+opt.thresh <- 1
+LinearModelL1(x.mat,y.vec,penalty,opt.thresh,initial.weight.vec)
+}
