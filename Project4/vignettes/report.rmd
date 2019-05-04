@@ -31,7 +31,7 @@ max.iterations <- 10
 n.folds <- 5
 step.size <-.5
 fold.vec <- sample(rep(1:n.folds,l=nrow(data.set$features)))
-final.mat <- matrix(1:12, nrow = 5, dimnames = list(c("Set-1","Set-2","Set-3","Set-4","Set-5"), c("L1-regularized Predictor","Baseline")))
+final.mat <- matrix(1:10, nrow = 5, dimnames = list(c("Set-1","Set-2","Set-3","Set-4","Set-5"), c("L1-regularized Predictor","Baseline")))
 #starts at 1
 for(test.fold in 1:n.folds){
   is.test <- fold.vec == test.fold
