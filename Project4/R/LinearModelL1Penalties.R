@@ -12,6 +12,16 @@
 #' @export
 #'
 #' @examples
+#' library(linearmodels)
+#' data(zip.train, package="ElemStatLearn")
+#' all.y.vec<-zip.train[, 1]
+#' is.01 <- all.y.vec %in% c(0,1)
+#' y.vec <- all.y.vec[is.01]
+#' x.mat <- zip.train[is.01,-1]
+#' penalty.vec <- c(5,4,3,2,1)
+#' step.size <- .5
+#' LinearModelL1penalties(x.mat,y.vec,penalty.vec,step.size)
+
 LinearModelL1penalties <- function(x.mat, y.vec, penalty.vec, step.size) {
     # Check type and dimension
     if (!all(is.numeric(x.mat), is.matrix(x.mat))) {

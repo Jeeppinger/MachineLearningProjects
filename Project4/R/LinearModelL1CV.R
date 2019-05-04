@@ -9,10 +9,17 @@
 #' @param penalty.vec a non-negative numeric decreasing penalty vector, default is 1 to 0.1 with 0.1 decreament
 #' @param step.size a positive numeric value, default is 0.1
 #'
-#' @return
+#' @return result.list
 #' @export
 #'
 #' @examples
+#' library(linearmodels)
+#' data(zip.train, package="ElemStatLearn")
+#' all.y.vec<-zip.train[, 1]
+#' is.01 <- all.y.vec %in% c(0,1)
+#' y.vec <- all.y.vec[is.01]
+#' x.mat <- zip.train[is.01,-1]
+#' LinearModelL1CV(x.mat,y.vec)
 LinearModelL1CV <-function(x.mat,y.vec,fold.vec = sample(rep(1:n.folds, l = length(y.vec))),n.folds = 5L,penalty.vec = seq(1, 0.1, -0.1),step.size = 0.1) {
     # Check types
   

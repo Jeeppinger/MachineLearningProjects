@@ -21,6 +21,18 @@ LinearModelL1CV(x.mat, y.vec, fold.vec = sample(rep(1:n.folds, l =
 
 \item{step.size}{a positive numeric value, default is 0.1}
 }
+\value{
+result.list
+}
 \description{
 This algorithm splits the data into several folds and apply LinealModelL1penalites to each fold
+}
+\examples{
+#' library(linearmodels)
+data(zip.train, package="ElemStatLearn")
+all.y.vec<-zip.train[, 1]
+is.01 <- all.y.vec \%in\% c(0,1)
+y.vec <- all.y.vec[is.01]
+x.mat <- zip.train[is.01,-1]
+LinearModelL1CV(x.mat,y.vec)
 }
