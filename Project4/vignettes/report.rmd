@@ -31,9 +31,9 @@ max.iterations <- 10
 n.folds <- 5
 step.size <-.5
 final.mat <- matrix(1:10, nrow = 5, dimnames = list(c("Set-1","Set-2","Set-3","Set-4","Set-5"), c("L1-regularized Predictor","Baseline")))
+fold.vec <- as.numeric(sample(rep(1:n.folds,l=nrow(data.set$features))))
 #starts at 1
 for(test.fold in 1:n.folds){
-  fold.vec <- as.numeric(sample(rep(1:n.folds,l=nrow(data.set$features))))
   is.test <- fold.vec == test.fold
   is.train <- !is.test
   x.train <- data.matrix(data.set$features[fold.vec,])
@@ -44,20 +44,22 @@ for(test.fold in 1:n.folds){
 
   cv.list <- linearmodels:: LinearModelL1CV(x.train,y.train,fold.vec,n.folds,penalty.vec,step.size)
   init.weight.vec <- cv.list$weight.vec
-  predict.func <- cv.list$predict(x.test)
-  selected.penalty <= cv.list$selected.penalty
+  predict.func <- cv.list$predict(x.train)
+  mean.train.loss.vec <- cv.list$mean.train.loss.vec
+  selected.penalty <- cv.list$selected.penalty
 
   #Inserts into our final matrix
   #L2 regularized predictor
-  final.mat[test.fold,2] = mean(square.loss)
-    #baseline/un-informed predictor
-  final.mat[test.fold,3] = baseline
-  early.stop.list
+  final.mat[test.fold,1] = mean(predict.func)
+  #baseline/un-informed predictor
+  final.mat[test.fold,2] = baseline
+  cv.list
 }
 library(gridExtra)
 library(grid)
 d <- head(final.mat)
-grid.table(d)
+d
+ grid.table(d)
 ```
 <h4>Analysis of Prostate Data Set</h4>
 <p>By observing this dataset we can conclude that the L2 is more accurate than the Early-Stopping. Baseline has more accuracy compared to the other two since all the starting numbers are 2 for it. Whereas Early-stop is very sparatic</p>
