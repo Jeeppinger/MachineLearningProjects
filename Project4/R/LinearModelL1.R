@@ -1,4 +1,5 @@
-
+#' Linear Model with L1 regularization
+#'
 #' @param x.scaled.mat matrix of size [n x p]
 #' @param y.vec vector of size n
 #' @param penalty non negative numeric scalar
@@ -11,7 +12,6 @@
 #'
 #' @examples
 LinearModelL1 <- function(x.scaled.mat, y.vec, penalty, opt.thresh, initial.weight.vec, step.size=.5) {
-  #1/n ∑i=1^n L[w^T x_i + b, y_i] + penalty * ||w||_1
   #trying to use the cost function written above
       # Check type and dimension
     if (!all(is.numeric(x.scaled.mat), is.matrix(x.scaled.mat))) {
