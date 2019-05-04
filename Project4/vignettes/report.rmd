@@ -122,7 +122,10 @@ data.set <- spam[, -dim(spam)[2]]
 data.set$labels <- data.set[, dim(data.set)[2]]
 data.set$features <- data.set[,-dim(data.set)[2]]
 set.seed(1)
+n.folds <-5
+step.size <- .5
 fold.vec <- sample(rep(1:n.folds,l=nrow(data.set$features)))
+final.mat <- matrix(1:10, nrow = 5, dimnames = list(c("Set-1","Set-2","Set-3","Set-4","Set-5"), c("L1-regularized Predictor","Baseline")))
 result.mat.list <- list()
 for(test.fold in 1:n.folds){
   is.test <- fold.vec == test.fold
@@ -150,6 +153,8 @@ library(gridExtra)
 library(grid)
 d <- head(final.mat)
 grid.table(d)
+plot(mean.validation.loss.vec,type="l")
+plot(mean.train.loss.vec,type="l")
 ```
 <h4>Analysis of Spam Data Set</h4>
 <p>By observing this dataset we can conclude that the L2 is more accurate than the Early-Stopping. Baseline has more accuracy compared to the other two since its a double and, L2 is just a fairly large number.</p>
@@ -169,19 +174,15 @@ result.mat.list <- list()
 for(test.fold in 1:n.folds){
   is.test <- fold.vec == test.fold
   is.train <- !is.test
-  x.train <- as.matrix(data.set$features[fold.vec,])
-  for(row in 1:nrow(x.train)){
-    if(x.train[row,5] == "Absent"){
-      x.train[row,"famhist"] = as.numeric(0)
-    } else{
-      x.train[row,"famhist"] = as.numeric(1)
-    }
-  }
-  y.train <- as.vector(data.set$labels[fold.vec])
+  x.train <- as.matrix(data.set$features[is.train,-5])
+  x1<- x.train
+  y.train <- data.set$labels[is.train]
+  sub.fold.vec <- sample(rep(1:n.folds,l=nrow(data.set$features)))
   penalty.vec = seq(1, 0.1, -0.1)
+  step.size <- .5
   baseline <- mean(y.train)
 
-  cv.list <- linearmodels:: LinearModelL1CV(as.numeric(x.train),y.train,fold.vec,n.folds,penalty.vec,step.size)
+  cv.list <- linearmodels:: LinearModelL1CV(as.numeric(x.train),y.train,sub.fold.vec,n.folds,penalty.vec,step.size)
   init.weight.vec <- cv.list$weight.vec
   predict.func <- cv.list$predict(x1.train)
   mean.train.loss.vec <- cv.list$mean.train.loss.vec
@@ -199,6 +200,8 @@ library(gridExtra)
 library(grid)
 d <- head(final.mat)
 grid.table(d)
+plot(mean.validation.loss.vec,type="l")
+plot(mean.train.loss.vec,type="l")
 ```
 <h4>Analysis of SAheart Data Set</h4>
 <p>By observing this dataset we can conclude that the L2 is more accurate than the Early-Stopping. Baseline has more accuracy compared to the other two since its a double</p>
@@ -255,6 +258,8 @@ library(gridExtra)
 library(grid)
 d <- head(final.mat)
 grid.table(d)
+plot(mean.validation.loss.vec,type="l")
+plot(mean.train.loss.vec,type="l")
 ```
 <h4>Analysis of zip.train Data Set</h4>
 <p>By observing this dataset we can conclude that the L2 and Early-Stopping are about the same since neither of which provide accurate data. Baseline has more accuracy compared to the other two since its a double and, because it has real data</p>
