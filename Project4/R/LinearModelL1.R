@@ -7,10 +7,21 @@
 #' @param initial.weight.vec vector of initial weights
 #' @param step.size integer > 1
 #' 
-#'@return optimal.weight.vector
+#' @return optimal.weight.vector
 #' @export
 #'
 #' @examples
+#' library(linearmodels)
+#' data(zip.train, package="ElemStatLearn")
+#' all.y.vec<-zip.train[, 1]
+#' is.01 <- all.y.vec %in% c(0,1)
+#' y.vec <- all.y.vec[is.01]
+#' x.mat <- zip.train[is.01,-1]
+#' n.cols <- ncol(x.mat)
+#' initial.weight.vec <- rep(0, n.cols + 1)
+#' penalty <- 1
+#' opt.thresh <- 1
+#' LinearModelL1(x.mat,y.vec,penalty,opt.thresh,initial.weight.vec)
 LinearModelL1 <- function(x.scaled.mat, y.vec, penalty, opt.thresh, initial.weight.vec, step.size=.5) {
   #trying to use the cost function written above
       # Check type and dimension
