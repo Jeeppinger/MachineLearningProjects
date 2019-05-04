@@ -99,14 +99,14 @@ LinearModelL1 <- function(x.scaled.mat, y.vec, penalty, opt.thresh, initial.weig
              abs(gradient - sign(w) * penalty))
     }
     
-    idx <-  0
+    iter <-  0
     while (1) {
       
       lst.n <- iter.learn(initial.weight.vec, step.size)
       return.weight.vec <- lst.n$w.vec
       loss(lst.n)
       can.break <- c(lst.n$gradient.vec[1], norm.gradient(lst.n$gradient.vec[-1], return.weight.vec[-1]))
-      idx <- idx + 1
+      iter <- iter + 1
       if ((norm(as.matrix(abs(can.break)),'2') < opt.thresh) || (iter >= max.iter))
         break;
     }

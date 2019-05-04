@@ -53,7 +53,7 @@ LinearModelL1penalties <- function(x.mat, y.vec, penalty.vec, step.size) {
     # w.temp.mat <- w.mat
     
     for (penalty.idx in c(1:n.penalties)) {
-      w.mat[, penalty.idx] <-LinearModelL1(x.scaled,as.numeric(y.vec),penalty.vec[penalty.idx],opt.thresh,initial.weight.vec,step.size)
+      w.mat[, penalty.idx] <-LinearModelL1(x.scaled.mat,as.numeric(y.vec),penalty.vec[penalty.idx],opt.thresh,initial.weight.vec,step.size)
       
       initial.weight.vec <-w.mat[, penalty.idx] 
     }
