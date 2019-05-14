@@ -46,6 +46,15 @@ knn <- function(x.mat, y.vec, testx.vec, max.neighbors){
 #' @export
 #'
 #' @examples
+#' library(nearestneighbors)
+#' data(ozone, package="ElemStatLearn")
+#' head(ozone)
+#' x.mat <- as.matrix(ozone[,-1])
+#' y.vec <- ozone[,1]
+#' max.neighbors <- 4
+#' n.folds <- 20
+#' fold.vec <- sample(rep(1:n.folds), length(y.vec),TRUE)
+#' nearestneighbors::NNLearnCV(x.mat=x.mat, y.vec=y.vec, max.neighbors=max.neighbors, fold.vec=fold.vec, n.folds=n.folds)
  NNLearnCV <- function(x.mat, y.vec, max.neighbors=30, fold.vec=NULL, n.folds=5){
    fold.vec <- sample(rep(1:n.folds, l=nrow(X.mat)))
    
